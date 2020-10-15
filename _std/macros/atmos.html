@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>_std&#x2F;macros&#x2F;atmos.dm - Goon Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">Goon Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="_std/macros/atmos.html#define">Define Details</a></header>
+<main>
+<h1>_std/macros/atmos.dm 
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/macros/atmos.dm">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;macros&#x2F;atmos.dm"/></a></h1>
+
+<table class="summary" cellspacing="0">
+        <tr><th><a href="_std/macros/atmos.html#define/R_IDEAL_GAS_EQUATION">R_IDEAL_GAS_EQUATION</a></th><td>in kPa<em>L/(K</em>mol)</td></tr>
+        <tr><th><a href="_std/macros/atmos.html#define/ONE_ATMOSPHERE">ONE_ATMOSPHERE</a></th><td>1atm, now in kPa</td></tr>
+        <tr><th><a href="_std/macros/atmos.html#define/MOLES_O2STANDARD">MOLES_O2STANDARD</a></th><td>O2 standard value (21%)</td></tr>
+        <tr><th><a href="_std/macros/atmos.html#define/MOLES_N2STANDARD">MOLES_N2STANDARD</a></th><td>N2 standard value (79%)</td></tr>
+        <tr><th><a href="_std/macros/atmos.html#define/MOLES_PLASMA_VISIBLE">MOLES_PLASMA_VISIBLE</a></th><td>Moles in a standard cell after which plasma is visible</td></tr>
+        <tr><th><a href="_std/macros/atmos.html#define/BREATH_VOLUME">BREATH_VOLUME</a></th><td>liters in a normal breath</td></tr>
+        <tr><th><a href="_std/macros/atmos.html#define/BREATH_PERCENTAGE">BREATH_PERCENTAGE</a></th><td>Amount of air to take a from a tile</td></tr>
+        <tr><th><a href="_std/macros/atmos.html#define/HUMAN_NEEDED_OXYGEN">HUMAN_NEEDED_OXYGEN</a></th><td>Amount of air needed before pass out/suffocation commences</td></tr>
+        <tr><th><a href="_std/macros/atmos.html#define/MINIMUM_AIR_RATIO_TO_SUSPEND">MINIMUM_AIR_RATIO_TO_SUSPEND</a></th><td>Minimum ratio of air that must move to/from a tile to suspend group processing</td></tr>
+        <tr><th><a href="_std/macros/atmos.html#define/MINIMUM_AIR_TO_SUSPEND">MINIMUM_AIR_TO_SUSPEND</a></th><td>Minimum amount of air that has to move before a group processing can be suspended</td></tr>
+        <tr><th><a href="_std/macros/atmos.html#define/MINIMUM_TEMPERATURE_DELTA_TO_SUSPEND">MINIMUM_TEMPERATURE_DELTA_TO_SUSPEND</a></th><td>Minimum temperature difference before group processing is suspended</td></tr>
+        <tr><th><a href="_std/macros/atmos.html#define/MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER">MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER</a></th><td>Minimum temperature difference before the gas temperatures are just set to be equa</td></tr>
+        <tr><th><a href="_std/macros/atmos.html#define/FIRE_CARBON_ENERGY_RELEASED">FIRE_CARBON_ENERGY_RELEASED</a></th><td>Amount of heat released per mole of burnt carbon into the tile</td></tr>
+        <tr><th><a href="_std/macros/atmos.html#define/FIRE_PLASMA_ENERGY_RELEASED">FIRE_PLASMA_ENERGY_RELEASED</a></th><td>Amount of heat released per mole of burnt plasma into the tile</td></tr>
+        <tr><th><a href="_std/macros/atmos.html#define/TANK_LEAK_PRESSURE">TANK_LEAK_PRESSURE</a></th><td>Tank starts leaking</td></tr>
+        <tr><th><a href="_std/macros/atmos.html#define/TANK_RUPTURE_PRESSURE">TANK_RUPTURE_PRESSURE</a></th><td>Tank spills all contents into atmosphere</td></tr>
+        <tr><th><a href="_std/macros/atmos.html#define/_ZERO_GAS">_ZERO_GAS</a></th><td>Given a gas mixture, zeroes it</td></tr>
+        <tr><th><a href="_std/macros/atmos.html#define/TOTAL_MOLES">TOTAL_MOLES</a></th><td>Returns total moles of a given gas mixture</td></tr></table><h2 id="define">Define Details</h2>
+<h3 id="define/BREATH_PERCENTAGE"><aside class="declaration">#define </aside>BREATH_PERCENTAGE
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/macros/atmos.dm#L23">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;macros&#x2F;atmos.dm 23"/></a>
+    </h3>
+    <p>Amount of air to take a from a tile</p><h3 id="define/BREATH_VOLUME"><aside class="declaration">#define </aside>BREATH_VOLUME
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/macros/atmos.dm#L21">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;macros&#x2F;atmos.dm 21"/></a>
+    </h3>
+    <p>liters in a normal breath</p><h3 id="define/FIRE_CARBON_ENERGY_RELEASED"><aside class="declaration">#define </aside>FIRE_CARBON_ENERGY_RELEASED
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/macros/atmos.dm#L61">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;macros&#x2F;atmos.dm 61"/></a>
+    </h3>
+    <p>Amount of heat released per mole of burnt carbon into the tile</p><h3 id="define/FIRE_PLASMA_ENERGY_RELEASED"><aside class="declaration">#define </aside>FIRE_PLASMA_ENERGY_RELEASED
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/macros/atmos.dm#L63">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;macros&#x2F;atmos.dm 63"/></a>
+    </h3>
+    <p>Amount of heat released per mole of burnt plasma into the tile</p><h3 id="define/HUMAN_NEEDED_OXYGEN"><aside class="declaration">#define </aside>HUMAN_NEEDED_OXYGEN
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/macros/atmos.dm#L25">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;macros&#x2F;atmos.dm 25"/></a>
+    </h3>
+    <p>Amount of air needed before pass out/suffocation commences</p><h3 id="define/MINIMUM_AIR_RATIO_TO_SUSPEND"><aside class="declaration">#define </aside>MINIMUM_AIR_RATIO_TO_SUSPEND
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/macros/atmos.dm#L29">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;macros&#x2F;atmos.dm 29"/></a>
+    </h3>
+    <p>Minimum ratio of air that must move to/from a tile to suspend group processing</p><h3 id="define/MINIMUM_AIR_TO_SUSPEND"><aside class="declaration">#define </aside>MINIMUM_AIR_TO_SUSPEND
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/macros/atmos.dm#L31">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;macros&#x2F;atmos.dm 31"/></a>
+    </h3>
+    <p>Minimum amount of air that has to move before a group processing can be suspended</p><h3 id="define/MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER"><aside class="declaration">#define </aside>MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/macros/atmos.dm#L43">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;macros&#x2F;atmos.dm 43"/></a>
+    </h3>
+    <p>Minimum temperature difference before the gas temperatures are just set to be equa</p><h3 id="define/MINIMUM_TEMPERATURE_DELTA_TO_SUSPEND"><aside class="declaration">#define </aside>MINIMUM_TEMPERATURE_DELTA_TO_SUSPEND
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/macros/atmos.dm#L41">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;macros&#x2F;atmos.dm 41"/></a>
+    </h3>
+    <p>Minimum temperature difference before group processing is suspended</p><h3 id="define/MOLES_N2STANDARD"><aside class="declaration">#define </aside>MOLES_N2STANDARD
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/macros/atmos.dm#L15">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;macros&#x2F;atmos.dm 15"/></a>
+    </h3>
+    <p>N2 standard value (79%)</p><h3 id="define/MOLES_O2STANDARD"><aside class="declaration">#define </aside>MOLES_O2STANDARD
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/macros/atmos.dm#L13">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;macros&#x2F;atmos.dm 13"/></a>
+    </h3>
+    <p>O2 standard value (21%)</p><h3 id="define/MOLES_PLASMA_VISIBLE"><aside class="declaration">#define </aside>MOLES_PLASMA_VISIBLE
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/macros/atmos.dm#L18">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;macros&#x2F;atmos.dm 18"/></a>
+    </h3>
+    <p>Moles in a standard cell after which plasma is visible</p><h3 id="define/ONE_ATMOSPHERE"><aside class="declaration">#define </aside>ONE_ATMOSPHERE
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/macros/atmos.dm#L4">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;macros&#x2F;atmos.dm 4"/></a>
+    </h3>
+    <p>1atm, now in kPa</p><h3 id="define/R_IDEAL_GAS_EQUATION"><aside class="declaration">#define </aside>R_IDEAL_GAS_EQUATION
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/macros/atmos.dm#L2">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;macros&#x2F;atmos.dm 2"/></a>
+    </h3>
+    <p>in kPa<em>L/(K</em>mol)</p><h3 id="define/TANK_LEAK_PRESSURE"><aside class="declaration">#define </aside>TANK_LEAK_PRESSURE
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/macros/atmos.dm#L76">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;macros&#x2F;atmos.dm 76"/></a>
+    </h3>
+    <p>Tank starts leaking</p><h3 id="define/TANK_RUPTURE_PRESSURE"><aside class="declaration">#define </aside>TANK_RUPTURE_PRESSURE
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/macros/atmos.dm#L78">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;macros&#x2F;atmos.dm 78"/></a>
+    </h3>
+    <p>Tank spills all contents into atmosphere</p><h3 id="define/TOTAL_MOLES"><aside class="declaration">#define </aside>TOTAL_MOLES
+            <aside>(MIXTURE)</aside>
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/macros/atmos.dm#L203">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;macros&#x2F;atmos.dm 203"/></a>
+    </h3>
+    <p>Returns total moles of a given gas mixture</p><h3 id="define/_ZERO_GAS"><aside class="declaration">#define </aside>_ZERO_GAS
+            <aside>(GAS, _, _, MIXTURE)</aside>
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/macros/atmos.dm#L187">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;macros&#x2F;atmos.dm 187"/></a>
+    </h3>
+    <p>Given a gas mixture, zeroes it</p></main>
+<footer>
+    goonstation.dme
+    <a href="https://github.com/Sovexe/goonstation/tree/30fef5c3a12745e93186d9954bfbe467c34f9348">30fef5c</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/src/dmdoc/README.md">dmdoc 1.3.0</a></footer>
+</body>
+</html>

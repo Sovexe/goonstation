@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;obj&#x2F;item - Goon Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">Goon Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="obj/item.html#var">Var Details</a> - <a href="obj/item.html#proc">Proc Details</a></header>
+<main>
+<h1>item <aside>/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a></aside>
+        
+    
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/code/obj/item.dm#L2">
+        <img src="git.png" width="16" height="16" title="code&#x2F;obj&#x2F;item.dm 2"/></a></h1>
+
+<p>Base item. These are objects you can hold, generally.</p>
+<p>/////////////////////// Base vars &amp; procs /////////////////////////////////</p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="obj/item.html#var/burn_type">burn_type</a></th><td>0 = ash, 1 = melt</td></tr>
+            <tr><th><a href="obj/item.html#var/cant_drop">cant_drop</a></th><td>Cant' be removed in general. I guess.</td></tr>
+            <tr><th><a href="obj/item.html#var/cant_other_remove">cant_other_remove</a></th><td>Can't be removed from non-hand slots by others</td></tr>
+            <tr><th><a href="obj/item.html#var/cant_self_remove">cant_self_remove</a></th><td>Can't remove from non-hand slots</td></tr>
+            <tr><th><a href="obj/item.html#var/click_delay">click_delay</a></th><td>Delay before next click after using this.</td></tr>
+            <tr><th><a href="obj/item.html#var/contraband">contraband</a></th><td>If nonzero, bots consider this a thing people shouldn't be carrying without authorization</td></tr>
+            <tr><th><a href="obj/item.html#var/edible">edible</a></th><td>can you eat the thing?</td></tr>
+            <tr><th><a href="obj/item.html#var/hit_type">hit_type</a></th><td>for bleeding system things, options: DAMAGE_BLUNT, DAMAGE_CUT, DAMAGE_STAB in order of how much it affects the chances to increase bleeding</td></tr>
+            <tr><th><a href="obj/item.html#var/inventory_counter_enabled">inventory_counter_enabled</a></th><td>Inventory count display. Call create_inventory_counter in New()</td></tr>
+            <tr><th><a href="obj/item.html#var/p_class">p_class</a></th><td>how hard they are to pull around, determines how much something slows you down while pulling it</td></tr>
+            <tr><th><a href="obj/item.html#var/rarity">rarity</a></th><td>Just a little thing to indicate item rarity. RPG fluff.</td></tr>
+            <tr><th><a href="obj/item.html#var/special">special</a></th><td>Contains the datum which executes the items special, if it has one, when used beyond melee range.</td></tr>
+            <tr><th><a href="obj/item.html#var/stack_type">stack_type</a></th><td>if null, only current type. otherwise uses this</td></tr>
+            <tr><th><a href="obj/item.html#var/two_handed">two_handed</a></th><td>Requires both hands. Do not change while equipped. Use proc for that (TBI)</td></tr>
+            <tr><th><a href="obj/item.html#var/useInnerItem">useInnerItem</a></th><td>Should this item use a contained item (in contents) to attack with instead?</td></tr>
+            <tr><th><a href="obj/item.html#var/w_class">w_class</a></th><td>how big they are, determines if they can fit in backpacks and pockets and the like</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="obj/item.html#proc/setTwoHanded">setTwoHanded</a></th><td>This is the safe way of changing 2-handed-ness at runtime. Use this please.</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/burn_type"><aside class="declaration">var </aside>burn_type
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/code/obj/item.dm#L21">
+        <img src="git.png" width="16" height="16" title="code&#x2F;obj&#x2F;item.dm 21"/></a></h3>
+        <p>0 = ash, 1 = melt</p><h3 id="var/cant_drop"><aside class="declaration">var </aside>cant_drop
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/code/obj/item.dm#L34">
+        <img src="git.png" width="16" height="16" title="code&#x2F;obj&#x2F;item.dm 34"/></a></h3>
+        <p>Cant' be removed in general. I guess.</p><h3 id="var/cant_other_remove"><aside class="declaration">var </aside>cant_other_remove
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/code/obj/item.dm#L32">
+        <img src="git.png" width="16" height="16" title="code&#x2F;obj&#x2F;item.dm 32"/></a></h3>
+        <p>Can't be removed from non-hand slots by others</p><h3 id="var/cant_self_remove"><aside class="declaration">var </aside>cant_self_remove
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/code/obj/item.dm#L30">
+        <img src="git.png" width="16" height="16" title="code&#x2F;obj&#x2F;item.dm 30"/></a></h3>
+        <p>Can't remove from non-hand slots</p><h3 id="var/click_delay"><aside class="declaration">var </aside>click_delay
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/code/obj/item.dm#L90">
+        <img src="git.png" width="16" height="16" title="code&#x2F;obj&#x2F;item.dm 90"/></a></h3>
+        <p>Delay before next click after using this.</p><h3 id="var/contraband"><aside class="declaration">var </aside>contraband
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/code/obj/item.dm#L50">
+        <img src="git.png" width="16" height="16" title="code&#x2F;obj&#x2F;item.dm 50"/></a></h3>
+        <p>If nonzero, bots consider this a thing people shouldn't be carrying without authorization</p><h3 id="var/edible"><aside class="declaration">var </aside>edible
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/code/obj/item.dm#L77">
+        <img src="git.png" width="16" height="16" title="code&#x2F;obj&#x2F;item.dm 77"/></a></h3>
+        <p>can you eat the thing?</p><h3 id="var/hit_type"><aside class="declaration">var </aside>hit_type
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/code/obj/item.dm#L11">
+        <img src="git.png" width="16" height="16" title="code&#x2F;obj&#x2F;item.dm 11"/></a></h3>
+        <p>for bleeding system things, options: DAMAGE_BLUNT, DAMAGE_CUT, DAMAGE_STAB in order of how much it affects the chances to increase bleeding</p><h3 id="var/inventory_counter_enabled"><aside class="declaration">var </aside>inventory_counter_enabled
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/code/obj/item.dm#L122">
+        <img src="git.png" width="16" height="16" title="code&#x2F;obj&#x2F;item.dm 122"/></a></h3>
+        <p>Inventory count display. Call create_inventory_counter in New()</p><h3 id="var/p_class"><aside class="parent"><a title="/atom/movable" href="atom/movable.html#var/p_class">&uarr;</a></aside>p_class
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/code/obj/item.dm#L28">
+        <img src="git.png" width="16" height="16" title="code&#x2F;obj&#x2F;item.dm 28"/></a></h3>
+        <p>how hard they are to pull around, determines how much something slows you down while pulling it</p><h3 id="var/rarity"><aside class="declaration">var </aside>rarity
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/code/obj/item.dm#L103">
+        <img src="git.png" width="16" height="16" title="code&#x2F;obj&#x2F;item.dm 103"/></a></h3>
+        <p>Just a little thing to indicate item rarity. RPG fluff.</p><h3 id="var/special"><aside class="declaration">var </aside>special
+            <aside>&ndash; /<a href="datum.html">datum</a>/item_special</aside>
+        
+    
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/code/obj/item.dm#L106">
+        <img src="git.png" width="16" height="16" title="code&#x2F;obj&#x2F;item.dm 106"/></a></h3>
+        <p>Contains the datum which executes the items special, if it has one, when used beyond melee range.</p><h3 id="var/stack_type"><aside class="declaration">var </aside>stack_type
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/code/obj/item.dm#L48">
+        <img src="git.png" width="16" height="16" title="code&#x2F;obj&#x2F;item.dm 48"/></a></h3>
+        <p>if null, only current type. otherwise uses this</p><h3 id="var/two_handed"><aside class="declaration">var </aside>two_handed
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/code/obj/item.dm#L88">
+        <img src="git.png" width="16" height="16" title="code&#x2F;obj&#x2F;item.dm 88"/></a></h3>
+        <p>Requires both hands. Do not change while equipped. Use proc for that (TBI)</p><h3 id="var/useInnerItem"><aside class="declaration">var </aside>useInnerItem
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/code/obj/item.dm#L84">
+        <img src="git.png" width="16" height="16" title="code&#x2F;obj&#x2F;item.dm 84"/></a></h3>
+        <p>Should this item use a contained item (in contents) to attack with instead?</p><h3 id="var/w_class"><aside class="declaration">var </aside>w_class
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/code/obj/item.dm#L26">
+        <img src="git.png" width="16" height="16" title="code&#x2F;obj&#x2F;item.dm 26"/></a></h3>
+        <p>how big they are, determines if they can fit in backpacks and pockets and the like</p><h2 id="proc">Proc Details</h2><h3 id="proc/setTwoHanded"><aside class="declaration">proc </aside>setTwoHanded<aside>(twohanded) 
+        
+    
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/code/obj/item.dm#L126">
+        <img src="git.png" width="16" height="16" title="code&#x2F;obj&#x2F;item.dm 126"/></a></aside>
+        </h3>
+        <p>This is the safe way of changing 2-handed-ness at runtime. Use this please.</p></main>
+<footer>
+    goonstation.dme
+    <a href="https://github.com/Sovexe/goonstation/tree/30fef5c3a12745e93186d9954bfbe467c34f9348">30fef5c</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/src/dmdoc/README.md">dmdoc 1.3.0</a></footer>
+</body>
+</html>

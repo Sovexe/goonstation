@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>_std&#x2F;defines&#x2F;actions.dm - Goon Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">Goon Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="_std/defines/actions.html#define">Define Details</a></header>
+<main>
+<h1>_std/defines/actions.dm 
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/defines/actions.dm">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;defines&#x2F;actions.dm"/></a></h1>
+
+<table class="summary" cellspacing="0">
+        <tr><th><a href="_std/defines/actions.html#define/INTERRUPT_ALWAYS">INTERRUPT_ALWAYS</a></th><td>Internal flag that will always interrupt any action.</td></tr>
+        <tr><th><a href="_std/defines/actions.html#define/INTERRUPT_MOVE">INTERRUPT_MOVE</a></th><td>Interrupted when object moves</td></tr>
+        <tr><th><a href="_std/defines/actions.html#define/INTERRUPT_ACT">INTERRUPT_ACT</a></th><td>Interrupted when object does anything</td></tr>
+        <tr><th><a href="_std/defines/actions.html#define/INTERRUPT_ATTACKED">INTERRUPT_ATTACKED</a></th><td>Interrupted when object is attacked</td></tr>
+        <tr><th><a href="_std/defines/actions.html#define/INTERRUPT_STUNNED">INTERRUPT_STUNNED</a></th><td>Interrupted when owner is stunned or knocked out etc.</td></tr>
+        <tr><th><a href="_std/defines/actions.html#define/INTERRUPT_ACTION">INTERRUPT_ACTION</a></th><td>Interrupted when another action is started.</td></tr>
+        <tr><th><a href="_std/defines/actions.html#define/ACTIONSTATE_STOPPED">ACTIONSTATE_STOPPED</a></th><td>Action has not been started yet.</td></tr>
+        <tr><th><a href="_std/defines/actions.html#define/ACTIONSTATE_RUNNING">ACTIONSTATE_RUNNING</a></th><td>Action is in progress</td></tr>
+        <tr><th><a href="_std/defines/actions.html#define/ACTIONSTATE_INTERRUPTED">ACTIONSTATE_INTERRUPTED</a></th><td>Action was interrupted</td></tr>
+        <tr><th><a href="_std/defines/actions.html#define/ACTIONSTATE_ENDED">ACTIONSTATE_ENDED</a></th><td>Action ended succesfully</td></tr>
+        <tr><th><a href="_std/defines/actions.html#define/ACTIONSTATE_DELETE">ACTIONSTATE_DELETE</a></th><td>Action is ready to be deleted.</td></tr>
+        <tr><th><a href="_std/defines/actions.html#define/ACTIONSTATE_FINISH">ACTIONSTATE_FINISH</a></th><td>Will finish action after next process.</td></tr>
+        <tr><th><a href="_std/defines/actions.html#define/ACTIONSTATE_INFINITE">ACTIONSTATE_INFINITE</a></th><td>Will not finish unless interrupted.</td></tr></table><h2 id="define">Define Details</h2>
+<h3 id="define/ACTIONSTATE_DELETE"><aside class="declaration">#define </aside>ACTIONSTATE_DELETE
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/defines/actions.dm#L23">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;defines&#x2F;actions.dm 23"/></a>
+    </h3>
+    <p>Action is ready to be deleted.</p><h3 id="define/ACTIONSTATE_ENDED"><aside class="declaration">#define </aside>ACTIONSTATE_ENDED
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/defines/actions.dm#L21">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;defines&#x2F;actions.dm 21"/></a>
+    </h3>
+    <p>Action ended succesfully</p><h3 id="define/ACTIONSTATE_FINISH"><aside class="declaration">#define </aside>ACTIONSTATE_FINISH
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/defines/actions.dm#L25">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;defines&#x2F;actions.dm 25"/></a>
+    </h3>
+    <p>Will finish action after next process.</p><h3 id="define/ACTIONSTATE_INFINITE"><aside class="declaration">#define </aside>ACTIONSTATE_INFINITE
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/defines/actions.dm#L27">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;defines&#x2F;actions.dm 27"/></a>
+    </h3>
+    <p>Will not finish unless interrupted.</p><h3 id="define/ACTIONSTATE_INTERRUPTED"><aside class="declaration">#define </aside>ACTIONSTATE_INTERRUPTED
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/defines/actions.dm#L19">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;defines&#x2F;actions.dm 19"/></a>
+    </h3>
+    <p>Action was interrupted</p><h3 id="define/ACTIONSTATE_RUNNING"><aside class="declaration">#define </aside>ACTIONSTATE_RUNNING
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/defines/actions.dm#L17">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;defines&#x2F;actions.dm 17"/></a>
+    </h3>
+    <p>Action is in progress</p><h3 id="define/ACTIONSTATE_STOPPED"><aside class="declaration">#define </aside>ACTIONSTATE_STOPPED
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/defines/actions.dm#L15">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;defines&#x2F;actions.dm 15"/></a>
+    </h3>
+    <p>Action has not been started yet.</p><h3 id="define/INTERRUPT_ACT"><aside class="declaration">#define </aside>INTERRUPT_ACT
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/defines/actions.dm#L6">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;defines&#x2F;actions.dm 6"/></a>
+    </h3>
+    <p>Interrupted when object does anything</p><h3 id="define/INTERRUPT_ACTION"><aside class="declaration">#define </aside>INTERRUPT_ACTION
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/defines/actions.dm#L12">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;defines&#x2F;actions.dm 12"/></a>
+    </h3>
+    <p>Interrupted when another action is started.</p><h3 id="define/INTERRUPT_ALWAYS"><aside class="declaration">#define </aside>INTERRUPT_ALWAYS
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/defines/actions.dm#L2">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;defines&#x2F;actions.dm 2"/></a>
+    </h3>
+    <p>Internal flag that will always interrupt any action.</p><h3 id="define/INTERRUPT_ATTACKED"><aside class="declaration">#define </aside>INTERRUPT_ATTACKED
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/defines/actions.dm#L8">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;defines&#x2F;actions.dm 8"/></a>
+    </h3>
+    <p>Interrupted when object is attacked</p><h3 id="define/INTERRUPT_MOVE"><aside class="declaration">#define </aside>INTERRUPT_MOVE
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/defines/actions.dm#L4">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;defines&#x2F;actions.dm 4"/></a>
+    </h3>
+    <p>Interrupted when object moves</p><h3 id="define/INTERRUPT_STUNNED"><aside class="declaration">#define </aside>INTERRUPT_STUNNED
+            <a href="https://github.com/Sovexe/goonstation/blob/30fef5c3a12745e93186d9954bfbe467c34f9348/_std/defines/actions.dm#L10">
+        <img src="git.png" width="16" height="16" title="_std&#x2F;defines&#x2F;actions.dm 10"/></a>
+    </h3>
+    <p>Interrupted when owner is stunned or knocked out etc.</p></main>
+<footer>
+    goonstation.dme
+    <a href="https://github.com/Sovexe/goonstation/tree/30fef5c3a12745e93186d9954bfbe467c34f9348">30fef5c</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/src/dmdoc/README.md">dmdoc 1.3.0</a></footer>
+</body>
+</html>
