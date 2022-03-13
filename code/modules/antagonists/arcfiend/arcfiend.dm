@@ -1,5 +1,6 @@
 #define MAX_ARCFIEND_POINTS 2500
 #define POWER_CELL_DRAIN_RATE 80
+#define SILICON_CELL_DRAIN_RATE POWER_CELL_DRAIN_RATE * 3
 #define POWER_CELL_CHARGE_PERCENT_MINIMUM 10
 #define SMES_DRAIN_RATE 100000
 #define SAP_LIMIT_APC 30
@@ -151,12 +152,12 @@ ABSTRACT_TYPE(/datum/targetable/arcfiend)
 
 		else if (issilicon(target))
 			var/mob/living/silicon/S = target
-			if (isdead(S) || (S.cell?.charge < POWER_CELL_DRAIN_RATE))
+			if (isdead(S) || (S.cell?.charge < SILICON_CELL_DRAIN_RATE))
 				boutput(holder.owner, "<span class='alert'>[target] doesn't have enough energy for you to absorb!")
 				interrupt(INTERRUPT_ALWAYS)
 				return
 			S.TakeDamage("chest", 3, 0, DAMAGE_BURN)
-			S.cell.use(POWER_CELL_DRAIN_RATE)
+			S.cell.use(SILICON_CELL_DRAIN_RATE)
 			holder.addPoints(SAP_LIMIT_MOB)
 			S.do_disorient(stamina_damage = 50, weakened = 1 SECONDS, disorient = 2 SECOND)
 
@@ -610,6 +611,7 @@ ABSTRACT_TYPE(/datum/targetable/arcfiend)
 
 #undef MAX_ARCFIEND_POINTS
 #undef POWER_CELL_DRAIN_RATE
+#undef SILICON_CELL_DRAIN_RATE
 #undef POWER_CELL_CHARGE_PERCENT_MINIMUM
 #undef SMES_DRAIN_RATE
 #undef SAP_LIMIT_APC
