@@ -322,6 +322,14 @@ var/global
 
 	ehjax.send(src.owner, "browseroutput", data)
 
+/datum/chatOutput/proc/addAlertBanner(text, class)
+	var/static/list/valid_classes = list(ALERT_SUCCESS, ALERT_INFO, ALERT_WARNING, ALERT_DANGER)
+	if (!class in valid_classes) class = null
+	var/data = json_encode(list("alertBanner" = text, "abClass" = class))
+	data = url_encode(data)
+
+	ehjax.send(src.owner, "browseroutput", data)
+
 /// Called by js client every 60 seconds
 /datum/chatOutput/proc/ping(last_ping)
 	last_ping = text2num(last_ping)

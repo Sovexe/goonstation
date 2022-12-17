@@ -1,0 +1,91 @@
+.alertBannerContainer {
+	/* Positioning */
+	position: fixed;
+	left: 0;
+	right: 0;
+	margin-top: 30px;
+
+	/* Box model */
+	padding: 10px;
+	box-sizing: border-box;
+}
+
+.alertBanner {
+	/* Cursor */
+	cursor: pointer;
+
+	/* Positioning */
+	position: relative;
+	left: 0;
+	right: 0;
+	margin-bottom: 5px;
+
+	/* Box model */
+	padding: 5px;
+	border-radius: 10px;
+	border: 2px solid;
+
+	/* Typography */
+	text-align: center;
+	font-size: 20px;
+}
+
+/* Hover effect */
+.alertBanner:hover:before {
+	/* Positioning */
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+
+	/* Box model */
+	border-radius: 5px;
+	border: 2px solid;
+	border-color: black;
+
+	/* Background */
+	background-color: rgba(0,0,0,0.6);
+
+	/* Typography */
+	color: white;
+	font-size: 20px;
+
+	/* Other */
+	content: "Click to dismiss";
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	}
+
+/* Alert types */
+.alertBanner.alert-success {
+	background-color:#DFF2BF;
+	border-color: rgba(38, 179, 3, 1);
+	color: #270;
+	}
+
+.alertBanner.alert-info {
+	background-color:#BEF;
+	border-color: rgba(126, 182, 193, 1);
+	color: #059;
+	}
+
+.alertBanner.alert-warning {
+	background-color:#FEEFB3;
+	border-color: rgba(177, 161, 129, 1);
+	color: #9F6000;
+	}
+
+.alertBanner.alert-danger {
+	background-color: #FFBABA;
+	border-color: rgba(220, 53, 69, 1);
+	color: #D8000C;
+	}
+
+.alertBanner.alert-cyborg {
+	background-color: black;
+	border-color: limegreen;
+	color: limegreen;
+	font-family: "Courier New", monospace;
+	}

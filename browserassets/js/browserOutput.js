@@ -486,6 +486,8 @@ function ehjaxCallback(data) {
                 '<span class="italic">You hear a strange robotic voice...</span>' + message;
             }
             output(message, 'preventLink');
+        } else if (data.alertBanner) {
+            addAlertBanner(data.alertBanner, abClass);
         } else if (data.playMusic) {
             if (window.HTMLAudioElement) {
                 try {
