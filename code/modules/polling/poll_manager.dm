@@ -10,9 +10,10 @@ var/global/datum/poll_manager/poll_manager = new
 			var/datum/apiRoute/polls/get/getPolls = new
 			getPolls.queryParams = list(
 				"filters" = list(
-					"active" = "true",
+				//	"active" = "true",
 					"server" = config.server_id
-				)
+				),
+				"sort_by" = "expires_at"
 			)
 			var/datum/apiModel/Paginated/PollResourceList/polls = apiHandler.queryAPI(getPolls)
 			poll_data = polls.ToList()["data"]

@@ -9,6 +9,10 @@
 	var/rate_limit_counter = 0
 	/// soft cap to start forcing 1 second cooldown
 	var/const/rate_limit_soft_cap = 10
+	/// used for conditional rendering of poll options in tgui
+	var/showOptions = FALSE
+	/// specifies if we are requesting active or inactive polls from the API
+	var/viewActive = TRUE
 
 /datum/poll_ballot/ui_state(mob/user)
 	return tgui_always_state.can_use_topic(src, user)
@@ -26,7 +30,8 @@
 	. = list(
 			"isAdmin" = isadmin(user),
 			"polls" = poll_manager.poll_data,
-			"playerId" = user.client.player.id
+			"playerId" = user.client.player.id,
+			"showOptions" = showOptions
 		)
 
 /datum/poll_ballot/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
@@ -220,6 +225,30 @@
 			poll_manager.sync_single_poll(params["pollId"])
 			. = TRUE
 
+		if ("expirePoll")
+			USR_ADMIN_ONLY
+			var/question
+			var/expires_at
+			var/servers
+			for (var/list/poll in poll_manager.poll_data)
+				if (poll["id"] == text2num(params["pollId"]))
+					question = poll["question"]
+					expires_at = toIso8601(subtractTime(world.realtime, hours = world.timezone))
+					servers = poll["servers"]
+					break
+			try
+				var/datum/apiRoute/polls/edit/editPoll = new
+				editPoll.routeParams = list("[params["pollId"]]")
+				editPoll.buildBody(question, expires_at, servers)
+				apiHandler.queryAPI(editPoll)
+			catch (var/exception/e)
+				var/datum/apiModel/Error/error = e.name
+				logTheThing(LOG_DEBUG, null, "Failed to edit a poll: [error.message]")
+				return FALSE
+
+			poll_manager.sync_single_poll(params["pollId"])
+			. = TRUE
+
 		if ("vote")
 			var/player_id = ui.user.client.player.id
 			if (!player_id) return
@@ -256,3 +285,7 @@
 			poll_manager.sync_single_poll(params["pollId"])
 			. = TRUE
 
+		if ("toggleShowOptions")
+			USR_ADMIN_ONLY
+			showOptions = !showOptions
+			. = TRUE
