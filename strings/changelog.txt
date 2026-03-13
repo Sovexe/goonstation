@@ -1,5 +1,9 @@
 
 (t)fri mar 13 26
+(u)JORJ949
+(p)26107
+(e)💅🐣|C-QoL, A-Respawning
+(*)You can now select to automatically spawn with your ID in your PDA with an option in character setup
 (u)bamlord
 (p)26124
 (e)🎨🌠|C-Sprites, A-Events
