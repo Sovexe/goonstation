@@ -35838,7 +35838,6 @@
 /obj/table/reinforced/bar/auto{
 	name = "wooden table"
 	},
-/obj/machinery/power/apc/autoname_north,
 /obj/cable{
 	icon_state = "0-2"
 	},
@@ -42641,6 +42640,14 @@
 	},
 /turf/simulated/floor/engine/caution/westeast,
 /area/station/engine/power)
+"nbl" = (
+/obj/stool/chair{
+	dir = 4
+	},
+/obj/disposalpipe/segment/vertical,
+/obj/machinery/power/apc/autoname_west,
+/turf/simulated/floor/wood/two,
+/area/station/crew_quarters/courtroom)
 "nbp" = (
 /obj/disposalpipe/junction/right/north,
 /obj/machinery/atmospherics/pipe/simple{
@@ -115452,7 +115459,7 @@ bFO
 xyt
 nhF
 bJP
-nhF
+nbl
 dSc
 jhd
 tiv
