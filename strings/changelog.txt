@@ -1,4 +1,9 @@
 
+(t)sat mar 14 26
+(u)LeahTheTech
+(p)26178
+(e)🔄💪|C-Rework, A-Traits
+(*)The kleptomaniac trait now makes you grab things and stuff them in your bag and pockets, stopping when you have no more space. It also now makes you rarely try to pickpocket the person standing next to you.
 (t)fri mar 13 26
 (u)JORJ949
 (p)26107
