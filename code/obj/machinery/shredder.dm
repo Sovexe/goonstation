@@ -10,9 +10,20 @@ TYPEINFO(/obj/machinery/shredder)
 	anchored = ANCHORED
 	deconstruct_flags = DECON_SCREWDRIVER | DECON_WIRECUTTERS | DECON_WRENCH
 	/// What can a shredder shred?
-	var/accepted_types = list(/obj/item/card, /obj/item/paper, /obj/item/toy/diploma, /obj/item/currency/spacecash, /obj/item/currency/fishing, /obj/item/random_mail)
+	var/accepted_types = list(
+		/obj/item/card,
+		/obj/item/paper,
+		/obj/item/toy/diploma,
+		/obj/item/currency/spacecash,
+		/obj/item/currency/fishing,
+		/obj/item/random_mail,
+		/obj/item/poster
+	)
 	/// Some things get rotated 90 degrees to fit better
-	var/rotated_types = list(/obj/item/card, /obj/item/currency/spacecash, /obj/item/currency/fishing)
+	var/rotated_types = list(/obj/item/card,
+		/obj/item/currency/spacecash,
+		/obj/item/currency/fishing
+	)
 	/// Visual proxy for the thing being shredded
 	var/atom/movable/proxy = null
 	var/shredding = FALSE
