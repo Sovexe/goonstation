@@ -1322,6 +1322,7 @@
 #include "code\modules\events\start\food_poisoning.dm"
 #include "code\modules\events\start\viscera_cleanup.dm"
 #include "code\modules\events\start\weed_growth.dm"
+#include "code\modules\events\start\wire_feast.dm"
 #include "code\modules\fishing\fish.dm"
 #include "code\modules\fishing\fishing_gear.dm"
 #include "code\modules\fishing\fishing_lootpools.dm"
