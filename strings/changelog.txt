@@ -1,4 +1,9 @@
 
+(t)mon mar 16 26
+(u)Kubius
+(p)26176
+(e)🆕⚖🔬📨|C-Feature, C-Balance, A-Science, A-Logistics
+(*)Nadir's Harmonic Siphon now consumes dramatically more power at high intensity, and may experience mechanical failures if power is interrupted mid-operation.
 (t)sun mar 15 26
 (u)Lord_Earthfire
 (p)26177
