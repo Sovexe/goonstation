@@ -1320,6 +1320,7 @@
 #include "code\modules\events\start\apc_scramble.dm"
 #include "code\modules\events\start\critter_infestation.dm"
 #include "code\modules\events\start\food_poisoning.dm"
+#include "code\modules\events\start\pry_maniac.dm"
 #include "code\modules\events\start\viscera_cleanup.dm"
 #include "code\modules\events\start\weed_growth.dm"
 #include "code\modules\events\start\wire_feast.dm"
