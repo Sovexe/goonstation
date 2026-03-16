@@ -1,5 +1,9 @@
 
 (t)mon mar 16 26
+(u)Pirate-Rob
+(p)25776
+(e)|
+(+)Computers now have a maintenance panel you can access by unscrewing them, allowing you to change peripherals and harddrives.
 (u)Kubius
 (p)26176
 (e)🆕⚖🔬📨|C-Feature, C-Balance, A-Science, A-Logistics
