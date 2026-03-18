@@ -28373,9 +28373,6 @@
 /area/station/crew_quarters/courtroom)
 "dAU" = (
 /obj/table/reinforced/auto,
-/obj/item/kitchen/food_box/lollipop{
-	pixel_y = 5
-	},
 /obj/mapping_helper/firedoor_spawn,
 /obj/machinery/door/airlock/pyro/glass/windoor,
 /obj/cable{
@@ -40929,11 +40926,6 @@
 /turf/simulated/floor/plating,
 /area/station/maintenance/inner/south)
 "lMO" = (
-/obj/machinery/light{
-	dir = 8;
-	layer = 9.1;
-	pixel_x = -10
-	},
 /obj/disposalpipe/segment/horizontal,
 /obj/cable{
 	icon_state = "4-8"
@@ -47512,6 +47504,9 @@
 /obj/cable{
 	icon_state = "1-2"
 	},
+/obj/item/kitchen/food_box/lollipop{
+	pixel_y = 5
+	},
 /turf/simulated/floor/darkblue,
 /area/station/medical/medbay/pharmacy)
 "qxl" = (
@@ -52378,7 +52373,7 @@
 "tTd" = (
 /obj/table/reinforced/auto,
 /obj/item/kitchen/food_box/lollipop{
-	pixel_y = 5
+	pixel_x = -8
 	},
 /obj/mapping_helper/firedoor_spawn,
 /obj/machinery/door/airlock/pyro/glass/windoor{
@@ -52387,8 +52382,13 @@
 /obj/cable{
 	icon_state = "4-8"
 	},
-/obj/machinery/cashreg,
+/obj/machinery/cashreg{
+	pixel_x = 4
+	},
 /obj/mapping_helper/access/medical,
+/obj/item/kitchen/food_box/lollipop{
+	pixel_x = -8
+	},
 /turf/simulated/floor/darkblue,
 /area/station/medical/medbay/lobby)
 "tTC" = (
@@ -96777,7 +96777,7 @@ cfn
 blb
 eka
 lMO
-wjr
+tCK
 gnR
 fRk
 tCK
