@@ -48105,7 +48105,7 @@
 /area/station/maintenance/outer/ne)
 "oWs" = (
 /obj/decal/poster/wallsign/danger_highvolt,
-/turf/simulated/wall/auto/reinforced/supernorn/yellow,
+/turf/simulated/wall/auto/reinforced/supernorn/yellow/sturdy,
 /area/station/engine/inner)
 "oWB" = (
 /obj/mesh/catwalk,
