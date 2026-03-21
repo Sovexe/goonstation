@@ -1,5 +1,9 @@
 
 (t)fri mar 20 26
+(u)Lord_Earthfire
+(p)26180
+(e)⚖📡|C-Balance, A-AI
+(+)Some mobs, such as spiders in your personal zoo, will be much more chill with people at the other side of windows
 (u)Pirate-Rob
 (p)26043
 (e)🗺🎨🔬🌠|A-Mapping, C-Sprites, A-Science, A-Events
