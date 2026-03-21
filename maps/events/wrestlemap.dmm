@@ -21728,11 +21728,6 @@
 /turf/simulated/floor/shuttlebay,
 /area/station/hangar/science)
 "jIX" = (
-/obj/machinery/door/airlock/pyro/security{
-	name = "Armory";
-	req_access = null
-	},
-/obj/mapping_helper/firedoor_spawn,
 /obj/cable{
 	icon_state = "1-2"
 	},
@@ -21740,7 +21735,10 @@
 	dir = 6;
 	icon_state = "delivery2"
 	},
+/obj/machinery/door/airlock/pyro/weapons/secure,
 /obj/mapping_helper/access/armory,
+/obj/mapping_helper/firedoor_spawn,
+/obj/mapping_helper/airlock/aiDisabler,
 /turf/simulated/floor/black,
 /area/station/ai_monitored/armory)
 "jJa" = (
