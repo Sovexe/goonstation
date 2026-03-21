@@ -8203,6 +8203,10 @@
 "cuK" = (
 /turf/simulated/wall/auto/supernorn,
 /area/station/crew_quarters/catering)
+"cvt" = (
+/obj/storage/secure/crate/weapon/armory/tranquilizer,
+/turf/simulated/floor/black,
+/area/station/ai_monitored/armory)
 "cvu" = (
 /turf/simulated/floor/escape{
 	dir = 4
@@ -16694,9 +16698,6 @@
 /turf/simulated/floor,
 /area/station/hydroponics/bay)
 "iBv" = (
-/obj/table/reinforced/auto{
-	icon_state = "10"
-	},
 /obj/item/storage/box/stinger_kit{
 	pixel_x = 7;
 	pixel_y = 14
@@ -16713,6 +16714,7 @@
 	pixel_x = -2;
 	pixel_y = -13
 	},
+/obj/table/reinforced/auto,
 /turf/simulated/floor/engine,
 /area/station/ai_monitored/armory)
 "iBE" = (
@@ -19178,7 +19180,23 @@
 /turf/simulated/floor,
 /area/station/hallway/primary/central)
 "kmh" = (
-/obj/random_item_spawner/armory_breaching_supplies,
+/obj/table/reinforced/auto,
+/obj/item/clothing/mask/gas{
+	pixel_x = -8;
+	pixel_y = 13
+	},
+/obj/item/clothing/mask/gas{
+	pixel_x = 2;
+	pixel_y = 9
+	},
+/obj/item/clothing/mask/gas{
+	pixel_x = -4;
+	pixel_y = -2
+	},
+/obj/item/clothing/mask/gas{
+	pixel_x = 6;
+	pixel_y = -1
+	},
 /turf/simulated/floor/engine,
 /area/station/ai_monitored/armory)
 "kmJ" = (
@@ -23590,22 +23608,7 @@
 	},
 /area/station/crew_quarters/fitness)
 "nAc" = (
-/obj/rack,
-/obj/item/clothing/glasses/thermal{
-	pixel_x = -6;
-	pixel_y = 5
-	},
-/obj/item/clothing/glasses/thermal{
-	pixel_x = -4
-	},
-/obj/item/clothing/glasses/nightvision{
-	pixel_x = 8;
-	pixel_y = -7
-	},
-/obj/item/clothing/glasses/nightvision{
-	pixel_x = 3;
-	pixel_y = -4
-	},
+/obj/random_item_spawner/armory_goggle_supplies,
 /turf/simulated/floor/engine,
 /area/station/ai_monitored/armory)
 "nAh" = (
@@ -25781,29 +25784,13 @@
 	},
 /area/station/mining/magnet)
 "oUD" = (
-/obj/rack,
-/obj/item/clothing/suit/armor/EOD{
-	pixel_x = -7;
-	pixel_y = -3
-	},
-/obj/item/clothing/head/helmet/EOD{
-	pixel_x = -4;
-	pixel_y = 3
-	},
-/obj/item/clothing/suit/armor/EOD{
-	pixel_x = 6;
-	pixel_y = -3
-	},
-/obj/item/clothing/head/helmet/EOD{
-	pixel_x = 9;
-	pixel_y = 3
-	},
 /obj/machinery/light/incandescent/warm/very{
 	dir = 1
 	},
 /obj/cable{
 	icon_state = "1-2"
 	},
+/obj/random_item_spawner/armory_breaching_supplies,
 /turf/simulated/floor/engine,
 /area/station/ai_monitored/armory)
 "oVl" = (
@@ -26437,23 +26424,7 @@
 /turf/simulated/floor/plating,
 /area/station/maintenance/southwest)
 "pkj" = (
-/obj/rack,
-/obj/item/clothing/suit/armor/heavy{
-	pixel_x = -9;
-	pixel_y = -3
-	},
-/obj/item/clothing/head/helmet/riot{
-	pixel_x = -8;
-	pixel_y = 5
-	},
-/obj/item/clothing/suit/armor/heavy{
-	pixel_x = 7;
-	pixel_y = -3
-	},
-/obj/item/clothing/head/helmet/riot{
-	pixel_x = 8;
-	pixel_y = 5
-	},
+/obj/random_item_spawner/armory_armor_supplies,
 /turf/simulated/floor/engine,
 /area/station/ai_monitored/armory)
 "pkm" = (
@@ -30341,9 +30312,6 @@
 /turf/simulated/floor,
 /area/station/crew_quarters/courtroom)
 "rBd" = (
-/obj/table/reinforced/auto{
-	icon_state = "1"
-	},
 /obj/item/reagent_containers/emergency_injector/atropine{
 	pixel_y = -2
 	},
@@ -30355,6 +30323,7 @@
 	pixel_x = 4;
 	pixel_y = 5
 	},
+/obj/table/reinforced/auto,
 /turf/simulated/floor/engine,
 /area/station/ai_monitored/armory)
 "rBt" = (
@@ -30536,9 +30505,6 @@
 /turf/simulated/floor/carpet,
 /area/station/crew_quarters/arcade)
 "rHz" = (
-/obj/table/reinforced/auto{
-	icon_state = "12"
-	},
 /obj/item/gun/kinetic/riot40mm{
 	pixel_x = -3;
 	pixel_y = 11
@@ -30554,6 +30520,7 @@
 	pixel_x = 6;
 	pixel_y = -2
 	},
+/obj/table/reinforced/auto,
 /turf/simulated/floor/engine,
 /area/station/ai_monitored/armory)
 "rIk" = (
@@ -31508,25 +31475,7 @@
 /turf/simulated/wall/auto/supernorn,
 /area/station/crew_quarters/barber_shop)
 "snh" = (
-/obj/table/reinforced/auto{
-	icon_state = "1"
-	},
-/obj/item/clothing/mask/gas{
-	pixel_x = -8;
-	pixel_y = 13
-	},
-/obj/item/clothing/mask/gas{
-	pixel_x = 6;
-	pixel_y = -1
-	},
-/obj/item/clothing/mask/gas{
-	pixel_x = 2;
-	pixel_y = 9
-	},
-/obj/item/clothing/mask/gas{
-	pixel_x = -4;
-	pixel_y = -2
-	},
+/obj/machinery/portable_atmospherics/canister/oxygen,
 /turf/simulated/floor/engine,
 /area/station/ai_monitored/armory)
 "snm" = (
@@ -91959,7 +91908,7 @@ pkj
 nAc
 buH
 xuE
-xuE
+cvt
 qQI
 eUu
 xLP
