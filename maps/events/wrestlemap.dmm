@@ -499,8 +499,7 @@
 "ahJ" = (
 /obj/machinery/door/airlock/pyro/glass{
 	dir = 4;
-	name = "Security";
-	req_access_txt = "1"
+	name = "Security"
 	},
 /obj/mapping_helper/firedoor_spawn,
 /obj/disposalpipe/segment/horizontal,
@@ -36857,15 +36856,14 @@
 "qDP" = (
 /obj/machinery/door/airlock/pyro/glass{
 	dir = 4;
-	name = "Locker Room";
-	req_access_txt = "1"
+	name = "Locker Room"
 	},
 /obj/mapping_helper/firedoor_spawn,
 /obj/cable{
 	icon_state = "4-8"
 	},
-/obj/mapping_helper/access/sec_lockers,
 /obj/decal/stripe_delivery,
+/obj/mapping_helper/access/security,
 /turf/simulated/floor,
 /area/station/security/secoffquarters)
 "qEb" = (
@@ -44615,8 +44613,7 @@
 "uoT" = (
 /obj/machinery/door/airlock/pyro/glass{
 	dir = 4;
-	name = "Security";
-	req_access_txt = "1"
+	name = "Security"
 	},
 /obj/mapping_helper/firedoor_spawn,
 /obj/mapping_helper/access/security,
@@ -50670,8 +50667,7 @@
 "wXN" = (
 /obj/machinery/door/airlock/pyro/glass{
 	dir = 4;
-	name = "Security";
-	req_access_txt = "1"
+	name = "Security"
 	},
 /obj/mapping_helper/firedoor_spawn,
 /obj/disposalpipe/segment/horizontal,
