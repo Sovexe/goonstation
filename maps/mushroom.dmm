@@ -1808,12 +1808,6 @@
 "alS" = (
 /turf/simulated/wall/auto/supernorn,
 /area/station/crew_quarters/market)
-"alU" = (
-/obj/machinery/light/incandescent{
-	dir = 8
-	},
-/turf/simulated/floor/black,
-/area/station/turret_protected/ai)
 "alX" = (
 /obj/cable{
 	icon_state = "4-8"
@@ -9358,11 +9352,11 @@
 /turf/simulated/floor/plating,
 /area/station/hydroponics/bay)
 "dnw" = (
-/obj/machinery/turretid{
-	pixel_x = 24
-	},
 /obj/machinery/light/small{
 	dir = 4
+	},
+/obj/machinery/turretid/ai_upload{
+	pixel_x = 24
 	},
 /turf/simulated/floor/darkblue,
 /area/station/turret_protected/ai_upload)
@@ -11190,8 +11184,11 @@
 /obj/cable/blue{
 	icon_state = "0-2"
 	},
-/obj/mapping_helper/wingrille_spawn/auto/reinforced,
-/turf/simulated/floor/circuit,
+/obj/machinery/door/airlock/pyro/glass/command{
+	dir = 4
+	},
+/obj/mapping_helper/access/ai_upload,
+/turf/simulated/floor/circuit/off,
 /area/station/turret_protected/ai)
 "evm" = (
 /obj/machinery/firealarm/directional/north,
@@ -12005,13 +12002,10 @@
 	pixel_x = 8;
 	pixel_y = 26
 	},
-/obj/machinery/turretid{
-	pixel_x = -8;
-	pixel_y = 24;
-	req_access = null
-	},
-/obj/mapping_helper/access/ai_upload,
 /obj/landmark/start/job/AI,
+/obj/machinery/camera/directional/east{
+	pixel_y = 10
+	},
 /turf/simulated/floor/circuit,
 /area/station/turret_protected/ai)
 "faE" = (
@@ -13783,9 +13777,10 @@
 	},
 /area/station/hallway/primary/central)
 "grU" = (
-/obj/machinery/light/incandescent{
-	dir = 4
+/obj/cable/blue{
+	icon_state = "4-8"
 	},
+/obj/machinery/light/incandescent,
 /turf/simulated/floor/black,
 /area/station/turret_protected/ai)
 "gsr" = (
@@ -23113,7 +23108,7 @@
 	icon_state = "0-8"
 	},
 /obj/mapping_helper/wingrille_spawn/auto/reinforced,
-/turf/simulated/floor/circuit,
+/turf/simulated/floor/circuit/off,
 /area/station/turret_protected/ai)
 "nib" = (
 /obj/mapping_helper/wingrille_spawn/auto/reinforced,
@@ -25479,7 +25474,7 @@
 	icon_state = "0-2"
 	},
 /obj/mapping_helper/wingrille_spawn/auto/reinforced,
-/turf/simulated/floor/circuit,
+/turf/simulated/floor/circuit/off,
 /area/station/turret_protected/ai)
 "oME" = (
 /obj/machinery/firealarm/directional/west,
@@ -27086,12 +27081,6 @@
 /area/station/hallway/primary/central)
 "pFY" = (
 /obj/machinery/computer/secure_data/detective_computer,
-/obj/machinery/turretid{
-	name = "Armory Perimeter Turret deactivation control";
-	req_access = list(37);
-	turretArea = /area/station/turret_protected/armory_outside;
-	pixel_x = 24
-	},
 /obj/cable{
 	icon_state = "1-8"
 	},
@@ -28107,12 +28096,9 @@
 /obj/cable/blue{
 	icon_state = "1-2"
 	},
+/obj/machinery/light/incandescent,
 /obj/machinery/camera/directional/north{
-	icon_state = "camera";
 	pixel_x = 10
-	},
-/obj/machinery/light/incandescent{
-	dir = 1
 	},
 /turf/simulated/floor/black,
 /area/station/turret_protected/ai)
@@ -31542,6 +31528,9 @@
 	icon_state = "camera";
 	pixel_x = 10
 	},
+/obj/machinery/turretid/ai_chamber{
+	pixel_y = 24
+	},
 /turf/simulated/floor/engine,
 /area/station/turret_protected/AIsat)
 "soA" = (
@@ -32445,7 +32434,7 @@
 	icon_state = "0-8"
 	},
 /obj/mapping_helper/wingrille_spawn/auto/reinforced,
-/turf/simulated/floor/circuit,
+/turf/simulated/floor/circuit/off,
 /area/station/turret_protected/ai)
 "sSY" = (
 /obj/cable{
@@ -35954,7 +35943,7 @@
 	icon_state = "0-2"
 	},
 /obj/mapping_helper/wingrille_spawn/auto/reinforced,
-/turf/simulated/floor/circuit,
+/turf/simulated/floor/circuit/off,
 /area/station/turret_protected/ai)
 "vdi" = (
 /obj/machinery/door/airlock/pyro/maintenance{
@@ -36958,7 +36947,7 @@
 	icon_state = "0-2"
 	},
 /obj/mapping_helper/wingrille_spawn/auto/reinforced,
-/turf/simulated/floor/circuit,
+/turf/simulated/floor/circuit/off,
 /area/station/turret_protected/ai)
 "vJM" = (
 /obj/machinery/mass_driver{
@@ -39083,7 +39072,7 @@
 	},
 /obj/cable/blue,
 /obj/mapping_helper/wingrille_spawn/auto/reinforced,
-/turf/simulated/floor/circuit,
+/turf/simulated/floor/circuit/off,
 /area/station/turret_protected/ai)
 "xpc" = (
 /obj/disposalpipe/segment{
@@ -40076,10 +40065,7 @@
 /turf/simulated/floor/plating,
 /area/station/maintenance/disposal)
 "xRL" = (
-/obj/machinery/turretid{
-	req_access = null
-	},
-/obj/mapping_helper/access/ai_upload,
+/obj/machinery/turretid/ai_perimeter,
 /turf/simulated/wall/auto/reinforced/supernorn,
 /area/station/turret_protected/AIbaseoutside)
 "xRT" = (
@@ -112485,8 +112471,8 @@ ovz
 dBi
 lVW
 ovz
+ovz
 grU
-hnK
 ovz
 hnK
 ovz
@@ -113693,7 +113679,7 @@ ovz
 gFI
 sEC
 ovz
-alU
+dUm
 hnK
 ovz
 hnK
