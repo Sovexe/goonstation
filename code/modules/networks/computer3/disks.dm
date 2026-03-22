@@ -170,7 +170,7 @@
 	read_only = 1
 
 /obj/item/disk/data/floppy/sec_command
-	icon_state = "datadisksyn" //yeah its "syndie" but its not used anywhere
+	icon_state = "datadiskhos"
 	disk_color = "#afb9c4"
 	random_color = FALSE
 
@@ -182,7 +182,7 @@
 		src.root.add_file(authrec)
 
 /obj/item/disk/data/floppy/security
-	icon_state = "datadiskmed" //yeah its "med" but its not used anywhere
+	icon_state = "datadisksec"
 	random_color = FALSE
 	New()
 		..()
