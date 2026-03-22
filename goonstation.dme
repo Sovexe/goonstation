@@ -2807,6 +2807,7 @@
 #include "code\obj\machinery\drone_factory.dm"
 #include "code\obj\machinery\drone_recharger.dm"
 #include "code\obj\machinery\espresso.dm"
+#include "code\obj\machinery\explodinator.dm"
 #include "code\obj\machinery\firealarm.dm"
 #include "code\obj\machinery\flasher.dm"
 #include "code\obj\machinery\floorflusher.dm"
