@@ -1,3 +1,10 @@
+
+(t)wed mar 25 26
+(u)glowbold
+(p)26246
+(e)🆕🔄📦|C-Feature, C-Rework, A-Game-Objects
+(*)The Genetic, Health, Reagent, and Market scanners will create a print out of the last scan when used in-hand
+(*)Health analyzers no longer have toggable states
 (t)sun mar 22 26
 (u)LeahTheTech, JORJ949, Mordent
 (*)Added the Explodinator 3007
