@@ -185,7 +185,7 @@ ADMIN_INTERACT_PROCS(/mob/living/critter/small_animal/mouse, proc/glorp)
 	shiny_chance = 0
 
 	death()
-		var/obj/machinery/wraith/rat_den/linked_den_deref = linked_den.deref()
+		var/obj/machinery/wraith/rat_den/linked_den_deref = linked_den?.deref()
 		if(linked_den_deref?.linked_critters > 0)
 			linked_den_deref.linked_critters--
 		..()
