@@ -35,7 +35,7 @@
 				if (linked_critters < max_critters)
 					var/mob/living/critter/small_animal/mouse/mad/rat_den/M = new /mob/living/critter/small_animal/mouse/mad/rat_den(src.loc)
 					LAZYLISTADDUNIQUE(M.faction, FACTION_WRAITH)
-					M.linked_den = src
+					M.linked_den = get_weakref(src)
 					linked_critters ++
 
 		//Plague rats in range heal up slowly

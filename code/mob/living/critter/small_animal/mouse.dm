@@ -180,13 +180,14 @@ ADMIN_INTERACT_PROCS(/mob/living/critter/small_animal/mouse, proc/glorp)
 
 //for mice spawned by plaguerat dens
 /mob/living/critter/small_animal/mouse/mad/rat_den
-	var/obj/machinery/wraith/rat_den/linked_den = null
+	var/datum/weakref/linked_den
 	player_can_spawn_with_pet = FALSE
 	shiny_chance = 0
 
 	death()
-		if(linked_den?.linked_critters > 0)
-			linked_den.linked_critters--
+		var/obj/machinery/wraith/rat_den/linked_den_deref = linked_den.deref()
+		if(linked_den_deref?.linked_critters > 0)
+			linked_den_deref.linked_critters--
 		..()
 /* -------------------- Remy -------------------- */
 
