@@ -168,6 +168,8 @@ ABSTRACT_TYPE(/datum/targetable/critter/plague_rat)
 	cooldown = 120 SECONDS
 	targeted = 0
 	var/datum/weakref/linked_den
+	var/type_to_spawn = /mob/living/critter/small_animal/mouse/mad
+	var/max_critters = 5
 
 	cast(atom/target)
 		if (..())
@@ -179,15 +181,10 @@ ABSTRACT_TYPE(/datum/targetable/critter/plague_rat)
 		if (deref)
 			qdel(deref)
 			boutput (holder.owner, SPAN_NOTICE("You had an old rat den, it is now destroyed."))
-			var/obj/machinery/wraith/rat_den/W = new /obj/machinery/wraith/rat_den(holder.owner.loc)
-			linked_den = get_weakref(W)
-			boutput (holder.owner, SPAN_NOTICE("You spawn a new rat den"))
-			return CAST_ATTEMPT_SUCCESS
-		else
-			var/obj/machinery/wraith/rat_den/W = new /obj/machinery/wraith/rat_den(holder.owner.loc)
-			linked_den = get_weakref(W)
-			boutput (holder.owner, SPAN_NOTICE("You spawn a rat den"))
-			return CAST_ATTEMPT_SUCCESS
+		var/obj/machinery/wraith/rat_den/W = new /obj/machinery/wraith/rat_den(holder.owner.loc, type_to_spawn, max_critters)
+		linked_den = get_weakref(W)
+		boutput (holder.owner, SPAN_NOTICE("You spawn a new rat den"))
+		return CAST_ATTEMPT_SUCCESS
 
 /datum/targetable/critter/slam/rat
 	icon = 'icons/mob/critter_ui.dmi'

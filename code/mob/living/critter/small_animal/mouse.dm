@@ -178,17 +178,6 @@ ADMIN_INTERACT_PROCS(/mob/living/critter/small_animal/mouse, proc/glorp)
 				bleed(H, rand(5,8), 5)
 				H.contract_disease(pick(src.disease_types), null, null, 1)
 
-//for mice spawned by plaguerat dens
-/mob/living/critter/small_animal/mouse/mad/rat_den
-	var/datum/weakref/linked_den
-	player_can_spawn_with_pet = FALSE
-	shiny_chance = 0
-
-	death()
-		var/obj/machinery/wraith/rat_den/linked_den_deref = linked_den?.deref()
-		if(linked_den_deref?.linked_critters > 0)
-			linked_den_deref.linked_critters--
-		..()
 /* -------------------- Remy -------------------- */
 
 /mob/living/critter/small_animal/mouse/remy
