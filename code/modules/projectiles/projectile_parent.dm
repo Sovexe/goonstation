@@ -80,6 +80,8 @@
 	var/list/crossing = list()
 	/// For precalculated projectiles, how far along the `crossing` list have we reached
 	var/curr_t = 0
+	/// Whether the projectile is precalculated or not, copied initially from the projectile datum but may change due to gravity shenanigans
+	var/precalculated = TRUE
 
 	/// Used to override the speed from the projectile datum so we can have WEIRD and DANGEROUS non-static speeds (see gyrojet)
 	/// Only works with non-precalc projectiles obviously.
@@ -316,6 +318,7 @@
 		if (src.proj_data == null)
 			die()
 			return
+		src.precalculated = src.proj_data.precalculated
 		src.pixel_z = src.proj_data.x_offset
 		src.pixel_w = src.proj_data.y_offset
 		name = src.proj_data.name
@@ -351,7 +354,7 @@
 
 		transform = matrix(src.proj_data.scale, src.proj_data.scale, MATRIX_SCALE)
 		Turn(angle)
-		if (!proj_data.precalculated)
+		if (!src.precalculated)
 			src.was_setup = TRUE
 			return
 		var/speed = internal_speed || proj_data.projectile_speed
@@ -479,7 +482,7 @@
 			die()
 			return
 
-		if (proj_data.precalculated)
+		if (src.precalculated)
 			var/incidence_turf = curr_turf
 			//now Move through the crossing turfs until we reach our current position in the list
 			for (var/i = 1, i < length(crossing), i++)
@@ -495,10 +498,10 @@
 				else
 					break
 			if (length(crossing) == 1)
-				proj_data.precalculated = FALSE
+				src.precalculated = FALSE
 
 
-		if (proj_data.precalculated)
+		if (src.precalculated)
 			wx += dwx
 			wy += dwy
 		else
