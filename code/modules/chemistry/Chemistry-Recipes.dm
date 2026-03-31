@@ -3338,7 +3338,6 @@
 		instant = FALSE
 
 		on_reaction(var/datum/reagents/holder, var/created_volume)
-			boutput(world, "[created_volume]")
 			holder.remove_reagent("salicylic_acid", created_volume)
 			holder.remove_reagent("acetic_acid", created_volume)
 			holder.add_reagent("water", created_volume, chemical_reaction = TRUE, chem_reaction_priority = 1)
