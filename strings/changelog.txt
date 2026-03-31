@@ -1,5 +1,9 @@
 
 (t)tue mar 31 26
+(u)TDHooligan
+(p)26219
+(e)💅⚗|C-QoL, A-Chemistry
+(+)Chemicompiler NOPs now wait until their beakers have reacted one 'tick'.
 (u)Sord
 (p)26288
 (e)🗺|A-Mapping
