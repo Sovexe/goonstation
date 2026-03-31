@@ -1,5 +1,9 @@
 
 (t)tue mar 31 26
+(u)Sord
+(p)26288
+(e)🗺|A-Mapping
+(*)Neon's main hallways (and some other areas) have been expanded. Make a bug report if something seems wonky
 (u)LeahTheTech
 (p)26282
 (e)🎨|C-Sprites
