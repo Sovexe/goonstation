@@ -1,3 +1,9 @@
+
+(t)tue mar 31 26
+(u)LeahTheTech
+(p)26282
+(e)🎨|C-Sprites
+(*)Replaced the bartender's shotgun ammo with heavier slugs that do more damage and always hit grounded targets. They do not fit in automatic shotguns.
 (t)sat mar 28 26
 (u)LeahTheTech
 (+)Shredders can now shred herbs, postits, and cigarettes.
