@@ -1,5 +1,9 @@
 
 (t)tue mar 31 26
+(u)Kubius
+(p)26188
+(e)🔄💨💡📨|C-Rework, A-Atmospherics, A-Station-Systems, A-Logistics
+(+)While in the disposal system, you can breathe the atmosphere that was used by disposal units to flush you along.
 (u)cringe
 (p)26213
 (e)🆕💊⚗💪|C-Feature, A-Medical, A-Chemistry, A-Traits
