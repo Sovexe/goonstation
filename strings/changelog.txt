@@ -1,5 +1,9 @@
 
 (t)sat apr 04 26
+(u)Bobbis dobbis
+(p)26272
+(e)🎨📦|C-Sprites, A-Game-Objects
+(+)Added 11 new drawings/symbols for crayons; check the PR for more info
 (u)Bamlord
 (p)26315
 (e)|
