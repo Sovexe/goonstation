@@ -1,6 +1,10 @@
 
 (t)sun apr 05 26
 (u)JORJ949
+(p)26150
+(e)🆕💅👮|C-Feature, C-QoL, A-Security
+(*)The Armory control computer has received a new UI menu to help security see the current state of the armory such as how many approvals there are and who has/has not approved.
+(u)JORJ949
 (p)26168
 (e)🆕🗺🎨⚖🧫🧛📦|C-Feature, A-Mapping, C-Sprites, C-Balance, C-Experimental, A-Gamemodes, A-Game-Objects
 (*)The syndicate listening post now contains a "syndicate codereader" which will reward 2TC the first time the authentication disk is inserted.
