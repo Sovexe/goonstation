@@ -105,11 +105,6 @@ TYPEINFO(/obj/machinery/codereader)
 	if(istype(src.inserted_disk, /obj/item/disk/data/floppy/read_only/authentication) && !src.authdisk_uploaded_by && src.credits_for_authdisk)
 		src.authdisk_uploaded_by = (user?.real_name || "Unknown")
 		logTheThing(LOG_STATION, user, "receives [src.credits_for_authdisk] traitor credits for inserting the authentication disk into [src]")
-		var/ircmsg[] = new()
-		ircmsg["key"] = (usr?.client) ? usr.client.key : "NULL"
-		ircmsg["name"] = (usr?.real_name) ? stripTextMacros(usr.real_name) : "NULL"
-		ircmsg["msg"] = "receives [src.credits_for_authdisk] traitor credits for inserting the authentication disk into the [src]"
-		ircbot.export_async("admin", ircmsg)
 
 		var/obj/item/uplink_telecrystal/tc_stack = new(src)
 		tc_stack.amount = src.credits_for_authdisk
