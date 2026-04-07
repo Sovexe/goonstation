@@ -356,6 +356,7 @@ TYPEINFO(/obj/item/clothing/shoes/industrial)
 	step_priority = 999
 	var/list/crayons = list() // stonepillar's crayon project
 	var/max_crayons = 5
+	var/crayonwalk_chance = 10
 
 	attackby(obj/item/W, mob/living/user)
 		if (istype(W, /obj/item/pen/crayon))
@@ -407,6 +408,12 @@ TYPEINFO(/obj/item/clothing/shoes/industrial)
 			src.add_fingerprint(user)
 			return
 		return ..()
+
+	emag_act(mob/user, obj/item/card/emag/E)
+		if (src.max_crayons == initial(src.max_crayons))
+			src.max_crayons = INFINITY
+			src.crayonwalk_chance = 50
+			boutput(user, SPAN_NOTICE("Somehow you open up a crayon pocket dimension in [src]"))
 
 	autumn
 		name = "autumn clown shoes"
