@@ -623,6 +623,12 @@ TYPEINFO(/obj/item/clothing/shoes/moon)
 			. = "Looks like some big shoes to fill!"
 		. = ..()
 
+	emag_act(mob/user, obj/item/card/emag/E)
+		if(src.step_sound != "clownstep")
+			src.step_sound = "clownstep"
+			src.step_priority = /obj/item/clothing/shoes/clown_shoes::step_priority
+			boutput(user, SPAN_NOTICE("You scramble the speakers installed in [src]"))
+
 /obj/item/clothing/shoes/swat/heavy/clown
 	name = "heavy clown boots"
 	desc = ""
