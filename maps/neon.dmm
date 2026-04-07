@@ -962,10 +962,6 @@
 /obj/machinery/computer/announcement/station/medical,
 /turf/simulated/floor/carpet/blue/fancy/edge/north,
 /area/station/medical/head)
-"aHl" = (
-/obj/disposalpipe/segment/horizontal,
-/turf/simulated/floor,
-/area/station/hangar/main)
 "aHy" = (
 /obj/stool/chair/comfy,
 /obj/npc/trader/skeleton,
@@ -10734,11 +10730,6 @@
 "hBB" = (
 /turf/simulated/wall/auto/supernorn,
 /area/station/maintenance/southeast)
-"hBF" = (
-/obj/machinery/disposal,
-/obj/disposalpipe/trunk/west,
-/turf/simulated/floor,
-/area/station/hangar/main)
 "hBK" = (
 /obj/mapping_helper/wingrille_spawn/auto/reinforced,
 /obj/cable,
@@ -11381,6 +11372,9 @@
 	dir = 10
 	},
 /area/station/medical/medbay)
+"hZr" = (
+/turf/simulated/wall/auto/supernorn,
+/area/station/bridge)
 "hZv" = (
 /obj/landmark/spawner/loot,
 /turf/simulated/floor/damaged2,
@@ -19096,7 +19090,8 @@
 /obj/decal/cleanable/oil{
 	icon_state = "floor6"
 	},
-/obj/disposalpipe/segment/horizontal,
+/obj/machinery/disposal/small/south,
+/obj/disposalpipe/trunk/west,
 /turf/simulated/floor,
 /area/station/hangar/main)
 "noI" = (
@@ -90302,7 +90297,7 @@ cVy
 dAj
 dAj
 dAj
-bho
+hZr
 uYY
 lvO
 lvO
@@ -94512,7 +94507,7 @@ blA
 gDU
 qWj
 ofF
-aHl
+blA
 nwd
 wgu
 srp
@@ -94814,7 +94809,7 @@ qWj
 rqJ
 mTl
 ofF
-hBF
+blA
 jeR
 wgu
 srp
