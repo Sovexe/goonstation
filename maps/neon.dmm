@@ -132,7 +132,7 @@
 	icon_state = "2-8"
 	},
 /obj/mapping_helper/firedoor_spawn,
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	cycle_id = "sec";
 	enter_id = "brig";
 	name = "Security"
@@ -893,7 +893,7 @@
 /obj/machinery/door/airlock/pyro/external{
 	dir = 4
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "ext airlock 1";
 	enter_id = "inner";
 	cycle_id = "ext1"
@@ -2153,7 +2153,7 @@
 	icon_state = "1-2"
 	},
 /obj/mapping_helper/firedoor_spawn,
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	cycle_id = "sec";
 	enter_id = "armory";
 	name = "Security"
@@ -4388,7 +4388,7 @@
 	icon_state = "1-2"
 	},
 /obj/mapping_helper/access/engineering,
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	cycle_id = "innereng";
 	enter_id = "outer";
 	name = "Inner Engineering"
@@ -4565,7 +4565,7 @@
 	},
 /obj/disposalpipe/segment/vertical,
 /obj/mapping_helper/access/engineering,
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	cycle_id = "innereng";
 	enter_id = "outer";
 	name = "Inner Engineering"
@@ -4708,7 +4708,7 @@
 /obj/machinery/door/airlock/pyro/external{
 	dir = 4
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "ext airlock elevator";
 	enter_id = "outer";
 	cycle_id = "extelevator"
@@ -4883,7 +4883,7 @@
 /obj/machinery/door/airlock/pyro/external{
 	dir = 4
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "escape airlock";
 	enter_id = "inner";
 	cycle_id = "escape"
@@ -5119,7 +5119,7 @@
 	icon_state = "1-2"
 	},
 /obj/mapping_helper/access/engineering,
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	cycle_id = "innereng";
 	enter_id = "inner";
 	name = "Inner Engineering"
@@ -6273,7 +6273,7 @@
 	icon_state = "2-8"
 	},
 /obj/mapping_helper/access/ai_upload,
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	cycle_id = "aicore";
 	enter_id = "inner";
 	name = "AI Core"
@@ -6345,7 +6345,7 @@
 	},
 /obj/disposalpipe/segment/brig,
 /obj/mapping_helper/access/security,
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	cycle_id = "sec";
 	enter_id = "outer";
 	name = "Security"
@@ -6404,7 +6404,7 @@
 /obj/machinery/door/airlock/pyro/external{
 	dir = 4
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "res outpost ext1";
 	enter_id = "outer";
 	cycle_id = "resext1"
@@ -7494,7 +7494,7 @@
 	},
 /obj/disposalpipe/segment/horizontal,
 /obj/mapping_helper/access/heads,
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	cycle_id = "bridge";
 	enter_id = "outer";
 	name = "Bridge"
@@ -8718,7 +8718,7 @@
 	},
 /obj/disposalpipe/segment/vertical,
 /obj/mapping_helper/access/ai_upload,
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	cycle_id = "aicore";
 	enter_id = "outer";
 	name = "AI Core"
@@ -8872,7 +8872,7 @@
 /obj/mapping_helper/firedoor_spawn,
 /obj/disposalpipe/segment/horizontal,
 /obj/mapping_helper/access/heads,
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	cycle_id = "bridge";
 	enter_id = "inner";
 	name = "Bridge"
@@ -9815,7 +9815,7 @@
 	icon_state = "1-2-thick"
 	},
 /obj/mapping_helper/firedoor_spawn,
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "engineering";
 	enter_id = "eng";
 	cycle_id = "engineering"
@@ -10120,7 +10120,7 @@
 /obj/cable{
 	icon_state = "1-2"
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "SW turbine";
 	enter_id = "turbine";
 	cycle_id = "sw_turbine"
@@ -10223,7 +10223,7 @@
 /obj/machinery/door/airlock/pyro/external{
 	dir = 4
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "ext airlock 3";
 	enter_id = "outer";
 	cycle_id = "ext3"
@@ -10625,7 +10625,7 @@
 	},
 /obj/disposalpipe/segment/horizontal,
 /obj/mapping_helper/firedoor_spawn,
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	cycle_id = "sec";
 	enter_id = "sec";
 	name = "Security"
@@ -10810,7 +10810,7 @@
 	},
 /obj/disposalpipe/segment/vertical,
 /obj/mapping_helper/access/engineering,
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	cycle_id = "innereng";
 	enter_id = "inner";
 	name = "Inner Engineering"
@@ -11200,7 +11200,7 @@
 /obj/cable{
 	icon_state = "1-2"
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "SE turbine";
 	enter_id = "turbine";
 	cycle_id = "se_turbine"
@@ -11942,7 +11942,7 @@
 /obj/cable{
 	icon_state = "1-2"
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "SW turbine";
 	enter_id = "inner";
 	cycle_id = "sw_turbine"
@@ -12228,7 +12228,7 @@
 /obj/cable/reinforced{
 	icon_state = "1-2-thick"
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "engineering";
 	enter_id = "exterior";
 	cycle_id = "engineering"
@@ -13310,7 +13310,7 @@
 /area/derelict_diner)
 "jrq" = (
 /obj/machinery/door/airlock/pyro/external,
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "ext airlock 1";
 	enter_id = "outer";
 	cycle_id = "ext1"
@@ -14079,7 +14079,7 @@
 /obj/cable{
 	icon_state = "1-2"
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "SE turbine";
 	enter_id = "inner";
 	cycle_id = "se_turbine"
@@ -16271,7 +16271,7 @@
 /obj/machinery/door/airlock/pyro/external{
 	name = "Corral"
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "res outpost ext2";
 	enter_id = "inner";
 	cycle_id = "resint2"
@@ -18270,7 +18270,7 @@
 /obj/machinery/door/airlock/pyro/external{
 	name = "Corral"
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "res outpost ext2";
 	enter_id = "outer";
 	cycle_id = "resint2"
@@ -19718,7 +19718,7 @@
 	dir = 8;
 	name = "turbine maintenance"
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "SE turbine";
 	enter_id = "outer";
 	cycle_id = "se_turbine"
@@ -21564,7 +21564,7 @@
 	},
 /obj/mapping_helper/access/security,
 /obj/disposalpipe/segment/ejection,
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	cycle_id = "sec";
 	enter_id = "outer";
 	name = "Security"
@@ -21875,7 +21875,7 @@
 /obj/machinery/door/airlock/pyro/external{
 	dir = 4
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "engineering";
 	enter_id = "right";
 	cycle_id = "engineering"
@@ -22232,7 +22232,7 @@
 /obj/machinery/door/airlock/pyro/external{
 	dir = 4
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "engineering";
 	enter_id = "right";
 	cycle_id = "engineering"
@@ -23648,7 +23648,7 @@
 	icon_state = "4-8"
 	},
 /obj/mapping_helper/access/heads,
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	cycle_id = "bridge";
 	enter_id = "outer";
 	name = "Bridge"
@@ -25415,7 +25415,7 @@
 /obj/machinery/door/airlock/pyro/external{
 	dir = 4
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "ext airlock 3";
 	enter_id = "inner";
 	cycle_id = "ext3"
@@ -26772,7 +26772,7 @@
 /area/station/bridge)
 "sSR" = (
 /obj/machinery/door/airlock/pyro/external,
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "ext airlock elevator";
 	enter_id = "inner";
 	cycle_id = "extelevator"
@@ -26816,7 +26816,7 @@
 /obj/machinery/door/airlock/pyro/external{
 	dir = 4
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "res outpost ext1";
 	enter_id = "inner";
 	cycle_id = "resint1"
@@ -26835,7 +26835,7 @@
 	icon_state = "4-8"
 	},
 /obj/mapping_helper/access/heads,
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	cycle_id = "bridge";
 	enter_id = "inner";
 	name = "Bridge"
@@ -27238,7 +27238,7 @@
 	},
 /obj/disposalpipe/segment/vertical,
 /obj/mapping_helper/access/head_of_personnel,
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	cycle_id = "bridge";
 	enter_id = "hop";
 	name = "Bridge"
@@ -28407,7 +28407,7 @@
 /obj/machinery/door/airlock/pyro/external{
 	dir = 4
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "engineering";
 	enter_id = "left";
 	cycle_id = "engineering"
@@ -30047,7 +30047,7 @@
 /area/heated_pool)
 "vgQ" = (
 /obj/machinery/door/airlock/pyro/external,
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	cycle_id = "diner";
 	enter_id = "inner";
 	name = "Space Diner"
@@ -30380,7 +30380,7 @@
 /obj/machinery/door/airlock/pyro/command/alt,
 /obj/mapping_helper/firedoor_spawn,
 /obj/mapping_helper/access/eva,
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	cycle_id = "bridge";
 	enter_id = "eva";
 	name = "Bridge"
@@ -31275,7 +31275,7 @@
 /obj/machinery/door/airlock/pyro/external{
 	dir = 4
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "escape airlock";
 	enter_id = "outer";
 	cycle_id = "escape"
@@ -33475,7 +33475,7 @@
 /obj/machinery/door/airlock/pyro/external{
 	dir = 8
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	cycle_id = "diner";
 	enter_id = "outer";
 	name = "Space Diner"
@@ -33537,7 +33537,7 @@
 /obj/machinery/door/airlock/pyro/external{
 	dir = 4
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "engineering";
 	enter_id = "left";
 	cycle_id = "engineering"
@@ -33643,7 +33643,7 @@
 /obj/machinery/door/airlock/pyro/external{
 	name = "turbine maintenance"
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "NW turbine";
 	enter_id = "inner";
 	cycle_id = "nw_turbine"
@@ -33820,7 +33820,7 @@
 	dir = 8;
 	name = "turbine maintenance"
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "SW turbine";
 	enter_id = "outer";
 	cycle_id = "sw_turbine"
@@ -34040,7 +34040,7 @@
 	dir = 8;
 	name = "turbine maintenance"
 	},
-/obj/mapping_helper/airlock/cycler{
+/obj/mapping_helper/airlock/cycler/manual{
 	name = "NW turbine";
 	enter_id = "outer";
 	cycle_id = "nw_turbine"
