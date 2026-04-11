@@ -1,5 +1,9 @@
 
 (t)sat apr 11 26
+(u)Nea
+(p)26319
+(e)🎨|C-Sprites
+(+)The Colt Single-Action Army revolver now has a golden icon variant, claimable via the Helios medal
 (u)LorrMaster
 (p)26320
 (e)🎨🧱|C-Sprites, A-Materials
