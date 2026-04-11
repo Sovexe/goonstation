@@ -1769,6 +1769,7 @@ ABSTRACT_TYPE(/obj/item/survival_rifle_barrel)
 	ammo_cats = list(AMMO_REVOLVER_45)
 	spread_angle = 1
 	max_ammo_capacity = 7
+	gildable = 1
 	default_magazine = /obj/item/ammo/bullets/c_45
 	recoil_strength = 11
 
