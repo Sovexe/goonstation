@@ -1,5 +1,9 @@
 
 (t)sat apr 11 26
+(u)Hawke
+(p)26378
+(e)|
+(+)Butcher knives can now be used to cut open mail.
 (u)LeahTheTech
 (+)Object explosion resistances no longer apply if the explosion happened on the same turf. Tl;dr: you can no longer perfect parry torpedoes.
 (u)Nea
