@@ -1,5 +1,10 @@
 
 (t)sat apr 11 26
+(u)Driftered
+(p)26327
+(e)🔄💊📦|C-Rework, A-Medical, A-Game-Objects
+(*)Character names no longer show up when you examine or scan an internal organ. DNA can still be used to track down an organ's original owner with a Forensic Scanner if desired.
+(+)Added character names to eyes
 (u)Hawke
 (p)26378
 (e)|
