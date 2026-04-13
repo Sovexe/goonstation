@@ -1,5 +1,7 @@
 
 (t)mon apr 13 26
+(u)JORJ949
+(+)You can no longer glue vehicles to things.
 (u)ANNmagedon
 (p)26377
 (e)🎩🐣|A-Clothing, A-Respawning
