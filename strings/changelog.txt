@@ -1,4 +1,9 @@
 
+(t)tue apr 14 26
+(u)JORJ949
+(p)26287
+(e)⚖🧛📦|C-Balance, A-Gamemodes, A-Game-Objects
+(*)Syndicate Infiltrators now receive chameleon XL fanny packs (essentially a second backpack) instead of chameleon belts.
 (t)mon apr 13 26
 (u)JORJ949
 (+)You can no longer glue vehicles to things.
