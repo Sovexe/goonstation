@@ -1,6 +1,11 @@
 
 (t)tue apr 14 26
 (u)JORJ949
+(p)26340
+(e)🗺🎨|A-Mapping, C-Sprites
+(+)Reinforced yellow engineering walls (such as those found on donut3) now have a black top to indicate that they are reinforced.
+(+)Plasmasteel reinforced engineering walls now have a slight purple tint
+(u)JORJ949
 (p)26287
 (e)⚖🧛📦|C-Balance, A-Gamemodes, A-Game-Objects
 (*)Syndicate Infiltrators now receive chameleon XL fanny packs (essentially a second backpack) instead of chameleon belts.
