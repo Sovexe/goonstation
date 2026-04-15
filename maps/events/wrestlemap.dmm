@@ -4432,6 +4432,7 @@
 "bVK" = (
 /obj/disposalpipe/segment/mail/horizontal,
 /obj/table/auto,
+/obj/item/reagent_containers/applicator/glue,
 /turf/simulated/floor/plating,
 /area/station/crew_quarters/clown)
 "bVS" = (

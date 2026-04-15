@@ -15716,6 +15716,7 @@
 "eSa" = (
 /obj/item/pen/crayon/rainbow,
 /obj/storage/crate/clown,
+/obj/item/reagent_containers/applicator/glue,
 /turf/simulated/floor/specialroom/clown,
 /area/station/crew_quarters/clown)
 "eSb" = (

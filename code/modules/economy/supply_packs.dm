@@ -824,7 +824,6 @@ ABSTRACT_TYPE(/datum/supply_packs)
 		/obj/item/storage/box/crayon/basic,
 		/obj/item/storage/box/crayon,
 		/obj/item/staple_gun/red,
-		/obj/item/reagent_containers/applicator/glue,
 		/obj/item/scissors,
 		/obj/item/canvas = 2,
 		/obj/item/stamp = 2)
