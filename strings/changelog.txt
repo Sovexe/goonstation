@@ -1,4 +1,6 @@
-
+(t)wed apr 15 26
+(u)LeahTheTech
+(+)Glued storages will no longer eat items when attacked.
 (t)tue apr 14 26
 (u)JORJ949
 (p)26340
