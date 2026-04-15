@@ -89,6 +89,9 @@
 					if(j+2<num_enemies) //don't overcap
 						num_salvagers += 3
 						j++
+					else if(j+1<num_enemies) //don't overcap
+						num_salvagers += 2
+						j++
 					else
 						j-- //reroll
 				if(ROLE_WEREWOLF) num_werewolves++
