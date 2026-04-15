@@ -1,6 +1,6 @@
 (t)wed apr 15 26
 (u)LeahTheTech
-(*)Nanotrasen has cut back on free glue supplies due to excessive reports of huffing, sniffing, and hitbox abuse. The clown has managed to hold onto a stick, however, and Josh is still ungovernable.
+(*)Nanotrasen has cut back on free glue supplies due to excessive reports of huffing, sniffing, and hitbox abuse. The clown has managed to hold on to a stick, however, and Josh is still ungovernable.
 (+)Glued storages will no longer eat items when attacked.
 (t)tue apr 14 26
 (u)JORJ949
