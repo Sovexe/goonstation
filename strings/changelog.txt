@@ -1,5 +1,14 @@
 
 (t)sun apr 19 26
+(u)Sord
+(p)25658
+(e)🗺🧫💡👮|A-Mapping, C-Experimental, A-Station-Systems, A-Security
+(*)On Saturday only: HoS has no whitelist requirement. More details in minor changelogs.
+(*)HoS players are expected to still follow the HoS Guidelines(check the wiki). Captains should also review them if acting as Security in a round.
+(*)HoS whitelisted players playing as NTSC on Saturdays should be acting as helpers to the HoS and generally not overruling the CoC unless absolutely necessary (ahelp if you have to)
+(+)On Saturday only: HoS has no whitelist requirement, NTSC unaffected
+(+)Captain gains hos office access
+(+)Captain, HoS, and NTSC have a 50 rounds played requirement
 (u)JORJ949
 (p)26398
 (e)⚖🐣|C-Balance, A-Respawning
