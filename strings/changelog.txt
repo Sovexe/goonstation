@@ -1,4 +1,9 @@
 
+(t)sun apr 19 26
+(u)JORJ949
+(p)26398
+(e)⚖🐣|C-Balance, A-Respawning
+(*)Each kudzu seed planted now grants a guaranteed conversion to the kudzu (e.g. your first kill is guaranteed to be converted). Having the Kudzuwalk status effect (e.g. you planted the kudzu) will guarantee you get converted to a kudzuperson if you aren't already a kudzuperson.
 (t)wed apr 15 26
 (u)Pirate-Rob
 (p)26019
