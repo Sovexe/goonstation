@@ -2878,9 +2878,10 @@
 
 	onRemove()
 		..()
-		if (src.added_accent)
-			var/mob/living/M = src.owner
-			M.bioHolder.RemoveEffectInstance(src.added_accent)
+		SPAWN(0)
+			if (src.added_accent)
+				var/mob/living/M = src.owner
+				M.bioHolder.RemoveEffectInstance(src.added_accent)
 		UnregisterSignal(src.owner, COMSIG_ATOM_SAY)
 
 /datum/statusEffect/graffiti
