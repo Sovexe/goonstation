@@ -1513,7 +1513,7 @@
 	req_access = null
 	},
 /obj/mapping_helper/firedoor_spawn,
-/turf/simulated/floor/plating/random,
+/turf/simulated/floor/plating,
 /area/station/maintenance/north)
 "agX" = (
 /obj/machinery/light/incandescent/cool/very,
@@ -7636,7 +7636,7 @@
 /area/station/medical/medbay/lobby)
 "aJu" = (
 /obj/landmark/random_room/size3x3,
-/turf/simulated/floor/plating/random,
+/turf/simulated/floor/plating,
 /area/station/maintenance/north)
 "aJw" = (
 /obj/cable{
@@ -27538,6 +27538,12 @@
 /mob/living/carbon/human/npc/monkey/krimpus,
 /turf/simulated/floor/grass,
 /area/station/hydroponics/bay)
+"ffg" = (
+/obj/machinery/door/airlock/pyro/maintenance/alt,
+/obj/mapping_helper/access/maint,
+/obj/mapping_helper/firedoor_spawn,
+/turf/simulated/floor/plating,
+/area/station/maintenance/inner/central)
 "ffh" = (
 /obj/mesh/grille/steel,
 /turf/simulated/floor/plating/random,
@@ -43634,8 +43640,12 @@
 /turf/simulated/floor/wood/two,
 /area/station/crew_quarters/barber_shop)
 "sQn" = (
-/obj/landmark/random_room/size3x3,
-/turf/simulated/floor/plating/random,
+/obj/machinery/door/airlock/pyro/maintenance/alt{
+	dir = 4
+	},
+/obj/mapping_helper/access/maint,
+/obj/mapping_helper/firedoor_spawn,
+/turf/simulated/floor/plating,
 /area/station/maintenance/inner/central)
 "sQC" = (
 /obj/disposalpipe/segment,
@@ -88948,8 +88958,8 @@ aqn
 aqn
 aqn
 afA
-afq
-afq
+exn
+exn
 aJu
 axA
 afA
@@ -89250,9 +89260,9 @@ aqn
 aqn
 aqn
 afA
-afq
-afq
-afq
+exn
+exn
+exn
 agW
 afq
 afq
@@ -89552,9 +89562,9 @@ aqn
 aqn
 aqn
 afA
-afq
-afq
-afq
+exn
+exn
+exn
 axA
 aiU
 arv
@@ -99857,7 +99867,7 @@ ggo
 aDr
 chd
 chd
-xPw
+sQn
 aCD
 aCD
 aqn
@@ -100158,9 +100168,9 @@ chd
 aDr
 aDr
 chd
-aDr
-aDr
-sQn
+iln
+iln
+xbm
 aCD
 aqn
 aqn
@@ -100459,10 +100469,10 @@ aDr
 ckO
 aDr
 aDr
-qkP
-aDr
-aDr
-aDr
+ffg
+iln
+iln
+iln
 aCD
 aqn
 aqn
@@ -100762,9 +100772,9 @@ chd
 aDr
 aDr
 chd
-aDr
-aDr
-aDr
+iln
+iln
+iln
 aCD
 aqn
 aqn
