@@ -1,5 +1,7 @@
 
 (t)mon apr 20 26
+(u)Sord
+(+)Added acetylsalicylic acid to the pharmacist's auto injector filler whitelist (not hypospray)
 (u)Kubius
 (p)26423
 (e)🗺|A-Mapping
