@@ -1,5 +1,9 @@
 
 (t)tue apr 21 26
+(u)RubberRats
+(p)26133
+(e)🎨🎩|C-Sprites, A-Clothing
+(*)You can now purchase sundresses, poet shirts, and raincoats from the clothing booth during the Spring season.
 (u)Cheekybrdy
 (p)26269
 (e)🗺🎨|A-Mapping, C-Sprites
