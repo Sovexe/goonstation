@@ -1419,8 +1419,6 @@ TYPEINFO(/obj/item/swords/katana)
 	icon_state = "katana_thundering"
 	rarity = ITEM_RARITY_LEGENDARY
 	hit_type = DAMAGE_BURN
-	contraband = 5
-	delimb_prob = 5
 
 	New()
 		..()
