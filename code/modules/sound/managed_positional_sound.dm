@@ -164,9 +164,9 @@ var/global/list/managed_positional_sound_channels = list()
 	/// Maximum stored-volume change per second when smoothing existing listeners.
 	var/volume_slew_per_second = 30
 	/// Maximum positional offset change per second when smoothing existing listeners.
-	var/position_slew_per_second = 18
+	var/position_slew_per_second = 6
 	/// Minimum positional offset change worth sending to BYOND.
-	var/position_deadzone = 0.2
+	var/position_deadzone = 0.1
 	/// Reserved BYOND channel used by this managed sound.
 	var/sound_channel = null
 	/// Whether this datum is still registered and sending updates.
@@ -190,7 +190,7 @@ var/global/list/managed_positional_sound_channels = list()
 	var/list/client_environment = list()
 	/// Last echo settings sent for each listener.
 	var/list/client_echo = list()
-	/// world.time of the last update sent to each listener.
+	/// world.time of the last positional update evaluation for each listener.
 	var/list/client_last_update_time = list()
 
 /datum/managed_positional_sound/New(atom/source, soundin, vol, vary = FALSE, extrarange = 0, pitch = 1, ignore_flag = 0, channel = VOLUME_CHANNEL_GAME, flags = 0, update_interval = MANAGED_POSITIONAL_SOUND_DEFAULT_UPDATE_INTERVAL, repeat = FALSE)
@@ -917,9 +917,10 @@ var/global/list/managed_positional_sound_channels = list()
 	var/max_delta = max(src.volume_slew_per_second * (src.update_interval / 1 SECOND), src.update_volume_threshold)
 	return current_volume + clamp(target_volume - current_volume, -max_delta, max_delta)
 
-/// Returns elapsed seconds since the last packet sent to a listener.
+/// Returns elapsed seconds since the last positional update evaluation and advances the slew clock.
 /datum/managed_positional_sound/proc/get_client_update_delta_seconds(client/C)
 	var/last_update_time = src.client_last_update_time[C]
+	src.client_last_update_time[C] = world.time
 	if (isnull(last_update_time))
 		return src.update_interval / (1 SECOND)
 
