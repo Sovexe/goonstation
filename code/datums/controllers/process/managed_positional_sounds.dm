@@ -3,6 +3,9 @@ var/global/datum/controller/process/managed_positional_sounds/managed_positional
 /// Managed positional sounds created before the process scheduler is ready.
 var/global/list/pending_managed_positional_sounds = list()
 
+/// Concrete spatial hashmap subtype. Used to index managed positional sound emitters by their source atoms.
+/datum/spatial_hashmap/managed_positional_sound_emitters
+
 /// Process scheduler that owns listener-driven managed positional sound discovery.
 /datum/controller/process/managed_positional_sounds
 	/// All currently active managed positional sounds.
@@ -32,7 +35,7 @@ var/global/list/pending_managed_positional_sounds = list()
 		src.dirty_sounds = list()
 		src.dirty_clients = list()
 		src.dirty_clients_need_prime = list()
-		src.emitter_hashmap = new /datum/spatial_hashmap(cell_size = MAX_SOUND_RANGE_NORMAL, name = "Managed Positional Sound Emitters")
+		src.emitter_hashmap = new /datum/spatial_hashmap/managed_positional_sound_emitters(cell_size = MAX_SOUND_RANGE_NORMAL, name = "Managed Positional Sound Emitters")
 		src.client_sounds = list()
 		src.tracked_clients = list()
 		src.client_listener_mobs = list()
@@ -201,7 +204,7 @@ var/global/list/pending_managed_positional_sounds = list()
 		if (!src.dirty_sounds)
 			src.dirty_sounds = list()
 		if (!src.emitter_hashmap)
-			src.emitter_hashmap = new /datum/spatial_hashmap(cell_size = MAX_SOUND_RANGE_NORMAL, name = "Managed Positional Sound Emitters")
+			src.emitter_hashmap = new /datum/spatial_hashmap/managed_positional_sound_emitters(cell_size = MAX_SOUND_RANGE_NORMAL, name = "Managed Positional Sound Emitters")
 
 		src.sounds[managed_sound] = TRUE
 		for (var/datum/managed_positional_sound_emitter/emitter as anything in managed_sound.emitters)
@@ -243,7 +246,7 @@ var/global/list/pending_managed_positional_sounds = list()
 			return
 
 		if (!src.emitter_hashmap)
-			src.emitter_hashmap = new /datum/spatial_hashmap(cell_size = MAX_SOUND_RANGE_NORMAL, name = "Managed Positional Sound Emitters")
+			src.emitter_hashmap = new /datum/spatial_hashmap/managed_positional_sound_emitters(cell_size = MAX_SOUND_RANGE_NORMAL, name = "Managed Positional Sound Emitters")
 
 		src.emitter_hashmap.register_hashmap_entry(emitter, emitter.source)
 		src.max_query_range = max(src.max_query_range, managed_sound.get_query_range())
