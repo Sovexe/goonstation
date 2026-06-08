@@ -2,6 +2,60 @@
 #define SOUNDCHANNEL_LOOPING 990
 #define SOUNDCHANNEL_FX_1 991
 #define SOUNDCHANNEL_FX_2 992
+
+#define TOO_QUIET 0.9 //experimentally found to be 0.6 - raised due to lag, I don't care if it's super quiet because there's already shitloads of other sounds playing
+#define SPACE_ATTEN_MIN 0.5
+#define EARLY_RETURN_IF_QUIET(v) if (v < TOO_QUIET) return
+#define EARLY_CONTINUE_IF_QUIET(v) if (v < TOO_QUIET) continue
+
+#define SOURCE_ATTEN(A) do {\
+	if (A <= SPACE_ATTEN_MIN){\
+		vol *= SPACE_ATTEN_MIN;\
+		extrarange = clamp(-MAX_SOUND_RANGE + MAX_SPACED_RANGE + extrarange, -32,-20);\
+		spaced_source = 1;\
+	}\
+	else{\
+		vol *= A\
+	}\
+} while(FALSE)
+
+#define LISTENER_ATTEN(A) do {\
+	if (A <= SPACE_ATTEN_MIN){\
+		if (!spaced_source && dist >= MAX_SPACED_RANGE){\
+			ourvolume = 0;\
+		}\
+		else{\
+			spaced_env = 1;\
+			ourvolume = clamp(ourvolume + 95, 25,200);\
+		}\
+	}\
+	else{\
+		ourvolume *= A\
+	}\
+} while(FALSE)
+
+#define MAX_SPACED_RANGE 6 //diff range for when youre in a vaccuum
+#define CLIENT_IGNORES_SOUND(C) (C?.ignore_sound_flags && ((ignore_flag && C.ignore_sound_flags & ignore_flag) || C.ignore_sound_flags & SOUND_ALL))
+
+#define SOUNDIN_ID (istype(soundin, /sound) ? soundin:file : (islist(soundin) ? ref(soundin) : soundin))
+
+/// First reserved BYOND channel for managed positional sounds.
+#define SOUNDCHANNEL_MANAGED_POSITIONAL_LOW 901
+/// Last reserved BYOND channel for managed positional sounds.
+#define SOUNDCHANNEL_MANAGED_POSITIONAL_HIGH 989
+/// Process scheduler cadence for managed positional sound updates.
+#define MANAGED_POSITIONAL_SOUND_PROCESS_INTERVAL 1 DECI SECOND
+/// Default maximum interval between managed positional sound updates.
+#define MANAGED_POSITIONAL_SOUND_DEFAULT_UPDATE_INTERVAL 1 DECI SECOND
+/// Minimum allowed interval between managed positional sound updates.
+#define MANAGED_POSITIONAL_SOUND_MIN_UPDATE_INTERVAL 1 DECI SECOND
+/// Fraction of a managed positional sound's range used to fade emitter blend weight near the edge.
+#define MANAGED_POSITIONAL_SOUND_BLEND_EDGE_FRACTION 0.15
+/// Minimum edge-fade width, in tiles, for managed positional sound emitter blending.
+#define MANAGED_POSITIONAL_SOUND_BLEND_MIN_EDGE_WIDTH 3
+/// Maximum blended volume relative to the managed sound's base volume.
+#define MANAGED_POSITIONAL_SOUND_BLEND_VOLUME_CAP_MULT 1.35
+
 #define SOUNDCHANNEL_RADIO 1013
 #define SOUNDCHANNEL_ADMIN_LOW 1014 // lower end of the range of admin channels
 #define SOUNDCHANNEL_ADMIN_HIGH 1024 // upper end

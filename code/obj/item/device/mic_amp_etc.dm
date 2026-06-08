@@ -140,3 +140,174 @@ TYPEINFO(/obj/machinery/loudspeaker)
 	. = ..()
 	if(prob(100*(src._health/src._max_health)))
 		src.set_broken()
+
+/// Demo loudspeaker that uses managed positional sound updates for a looping ambient track.
+/obj/machinery/loudspeaker/positional_loop_demo
+	name = "positional loop demo speaker"
+	desc = "A loudspeaker playing a looping positional test sound."
+
+	/// Sound file used by this demo speaker.
+	var/loop_sound = 'sound/ambience/station/Machinery_Computers1.ogg'
+	/// Base volume before distance falloff and listener volume preferences.
+	var/loop_volume = 60
+	/// Extra range added to MAX_SOUND_RANGE for this demo.
+	var/loop_extrarange = 0
+	/// Volume channel used by the demo loop.
+	var/loop_volume_channel = VOLUME_CHANNEL_INSTRUMENTS
+	/// Managed positional sound behavior flags.
+	var/loop_flags = 0
+	/// Maximum interval between managed positional sound updates.
+	var/loop_update_interval = MANAGED_POSITIONAL_SOUND_DEFAULT_UPDATE_INTERVAL
+	/// Whether the demo starts playing when spawned.
+	var/starts_on = TRUE
+	/// Active managed positional sound datum owned by this speaker.
+	var/datum/managed_positional_sound/sound_loop = null
+
+/obj/machinery/loudspeaker/positional_loop_demo/New()
+	. = ..()
+	if (src.starts_on)
+		src.start_sound_loop()
+
+/obj/machinery/loudspeaker/positional_loop_demo/disposing()
+	src.stop_sound_loop()
+	. = ..()
+
+/obj/machinery/loudspeaker/positional_loop_demo/attack_hand(mob/user)
+	if (src.sound_loop)
+		src.stop_sound_loop()
+		user?.show_text("You switch [src] off.")
+	else
+		if (src.start_sound_loop())
+			user?.show_text("You switch [src] on.")
+		else
+			user?.show_text("[src] doesn't respond.", "red")
+	return
+
+/obj/machinery/loudspeaker/positional_loop_demo/set_broken()
+	. = ..()
+	if (!.)
+		src.stop_sound_loop()
+
+/// Starts this demo speaker's explicit looping managed positional sound.
+/obj/machinery/loudspeaker/positional_loop_demo/proc/start_sound_loop()
+	if (src.sound_loop || (src.status & BROKEN) || !src.loop_sound)
+		return FALSE
+
+	src.sound_loop = play_managed_positional_sound(src, src.loop_sound, src.loop_volume, FALSE, src.loop_extrarange, 1, 0, src.loop_volume_channel, src.loop_flags, src.loop_update_interval, TRUE)
+	return !isnull(src.sound_loop)
+
+/// Stops this demo speaker's active managed positional sound.
+/obj/machinery/loudspeaker/positional_loop_demo/proc/stop_sound_loop()
+	if (!src.sound_loop)
+		return FALSE
+
+	src.sound_loop.stop()
+	src.sound_loop = null
+	return TRUE
+
+/// Demo loudspeaker that plays one managed positional sound through nearby passive demo speakers.
+/obj/machinery/loudspeaker/positional_multi_emitter_demo
+	name = "positional multi-emitter demo speaker"
+	desc = "A loudspeaker playing a synchronized positional test sound from nearby demo emitters."
+
+	/// Sound file used by this demo speaker.
+	var/loop_sound = 'sound/ambience/station/Machinery_Computers1.ogg'
+	/// Base volume before distance falloff and listener volume preferences.
+	var/loop_volume = 60
+	/// Extra range added to MAX_SOUND_RANGE for this demo.
+	var/loop_extrarange = 0
+	/// Volume channel used by the demo loop.
+	var/loop_volume_channel = VOLUME_CHANNEL_INSTRUMENTS
+	/// Managed positional sound behavior flags.
+	var/loop_flags = 0
+	/// Maximum interval between managed positional sound updates.
+	var/loop_update_interval = MANAGED_POSITIONAL_SOUND_DEFAULT_UPDATE_INTERVAL
+	/// Whether the demo starts playing when spawned.
+	var/starts_on = TRUE
+	/// Maximum distance to search for passive demo emitters when starting.
+	var/emitter_search_range = 15
+	/// Active managed positional sound datum owned by this speaker.
+	var/datum/managed_positional_sound/sound_loop = null
+
+/obj/machinery/loudspeaker/positional_multi_emitter_demo/New()
+	. = ..()
+	if (src.starts_on)
+		SPAWN(1 DECI SECOND)
+			if (!QDELETED(src))
+				src.start_sound_loop()
+
+/obj/machinery/loudspeaker/positional_multi_emitter_demo/disposing()
+	src.stop_sound_loop()
+	. = ..()
+
+/obj/machinery/loudspeaker/positional_multi_emitter_demo/attack_hand(mob/user)
+	if (src.sound_loop)
+		src.stop_sound_loop()
+		user?.show_text("You switch [src] off.")
+	else
+		if (src.start_sound_loop())
+			user?.show_text("You switch [src] on.")
+		else //oh no...
+			user?.show_text("[src] doesn't respond. Check that a managed positional sound channel is available.", "red")
+	return
+
+/obj/machinery/loudspeaker/positional_multi_emitter_demo/set_broken()
+	. = ..()
+	if (!.)
+		src.stop_sound_loop()
+
+/// Starts this demo speaker's looping managed positional sound and attaches passive demo speakers as emitters.
+/obj/machinery/loudspeaker/positional_multi_emitter_demo/proc/start_sound_loop()
+	if (src.sound_loop || (src.status & BROKEN) || !src.loop_sound)
+		return FALSE
+
+	src.sound_loop = play_managed_positional_sound(src, src.loop_sound, src.loop_volume, FALSE, src.loop_extrarange, 1, 0, src.loop_volume_channel, src.loop_flags, src.loop_update_interval, TRUE)
+	if (!src.sound_loop)
+		return FALSE
+
+	src.refresh_emitters()
+	return TRUE
+
+/// Rebuilds this demo sound's passive emitter list.
+/obj/machinery/loudspeaker/positional_multi_emitter_demo/proc/refresh_emitters()
+	if (!src.sound_loop)
+		return 0
+
+	var/emitters_added = 0
+	var/turf/source_turf = get_turf(src)
+	for_by_tcl(emitter, /obj/machinery/loudspeaker/positional_multi_emitter_demo/passive)
+		var/turf/emitter_turf = get_turf(emitter)
+		if (!source_turf || !emitter_turf || emitter_turf.z != source_turf.z || !IN_RANGE(src, emitter, src.emitter_search_range))
+			continue
+		if (emitter.status & BROKEN)
+			continue
+		src.sound_loop.add_emitter(emitter)
+		emitters_added++
+
+	return emitters_added
+
+/// Stops this demo speaker's active managed positional sound.
+/obj/machinery/loudspeaker/positional_multi_emitter_demo/proc/stop_sound_loop()
+	if (!src.sound_loop)
+		return FALSE
+
+	src.sound_loop.stop()
+	src.sound_loop = null
+	return TRUE
+
+/// Passive multi-emitter demo node. Place these near a multi-emitter demo speaker. Toggle it on and off and they should link up
+/obj/machinery/loudspeaker/positional_multi_emitter_demo/passive
+	name = "positional multi-emitter demo node"
+	desc = "A passive loudspeaker used as an extra emitter for a nearby multi-emitter demo speaker."
+	starts_on = FALSE
+
+	New()
+		. = ..()
+		START_TRACKING
+	disposing()
+		STOP_TRACKING
+		. = ..()
+
+/obj/machinery/loudspeaker/positional_multi_emitter_demo/passive/attack_hand(mob/user)
+	user?.show_text("[src] is a passive emitter node.")
+	return
