@@ -58,15 +58,18 @@ var/global/list/managed_positional_sound_channels = list()
 	if (global.managed_positional_sound_channels[channel_key] == managed_sound)
 		global.managed_positional_sound_channels -= channel_key
 
-/// Smoothstep rolloff for managed positional sounds. This is intentionally softer than the legacy playsound() curve.
+/// Uses the standard positional sound falloff curve so managed positional sounds fade before hard range/space edges.
 /proc/get_managed_positional_sound_falloff_multiplier(dist, max_range)
 	if (max_range <= 0)
 		return 0
 
 	var/scaled_dist = clamp(dist / max_range, 0, 1)
-	return 1 - (scaled_dist * scaled_dist * (3 - (2 * scaled_dist)))
+	if (scaled_dist <= 0)
+		return 1
 
-/// Managed positional sounds use their whole hard range; the softer rolloff can remain audible until close to the edge.
+	return 1 - ((MANAGED_POSITIONAL_SOUND_FALLOFF_SHAPE * (MANAGED_POSITIONAL_SOUND_FALLOFF_MIDPOINT ** MANAGED_POSITIONAL_SOUND_FALLOFF_EXPONENT)) / ((scaled_dist ** MANAGED_POSITIONAL_SOUND_FALLOFF_EXPONENT) + (MANAGED_POSITIONAL_SOUND_FALLOFF_MIDPOINT ** MANAGED_POSITIONAL_SOUND_FALLOFF_EXPONENT)))
+
+/// Returns the broad spatial query range needed to find potentially audible managed positional listeners.
 /proc/get_managed_positional_sound_query_range(vol, max_range)
 	if (vol <= TOO_QUIET || max_range <= 0)
 		return 0
@@ -81,6 +84,50 @@ var/global/list/managed_positional_sound_channels = list()
 	var/edge_width = max(MANAGED_POSITIONAL_SOUND_BLEND_MIN_EDGE_WIDTH, max_range * MANAGED_POSITIONAL_SOUND_BLEND_EDGE_FRACTION)
 	var/scaled_edge_dist = clamp((max_range - dist) / edge_width, 0, 1)
 	return scaled_edge_dist * scaled_edge_dist * (3 - (2 * scaled_edge_dist))
+
+/// Returns multi-emitter pan blend weight. Square-root volume keeps quieter emitters relevant enough to avoid abrupt pan field handoffs.
+/// The edge fade is squared so emitters entering their outer audible range do not immediately pull the pan field hard.
+/proc/get_managed_positional_sound_pan_blend_weight(stored_volume, edge_fade)
+	if (stored_volume <= 0 || edge_fade <= 0)
+		return 0
+
+	return sqrt(stored_volume) * edge_fade * edge_fade
+
+/// Converts computed managed positional x intent into the explicit sound.pan value stored for the client and sent to BYOND.
+/proc/get_managed_positional_sound_output_pan(sound_x)
+	return clamp(sound_x * MANAGED_POSITIONAL_SOUND_EXPLICIT_PAN_PER_TILE, -MANAGED_POSITIONAL_SOUND_MAX_EXPLICIT_PAN, MANAGED_POSITIONAL_SOUND_MAX_EXPLICIT_PAN)
+
+/// Applies the already-finalized managed positional pan to a BYOND sound.
+/proc/apply_managed_positional_sound_output(sound/S, sound_pan)
+	if (!S)
+		return
+
+	S.pan = sound_pan
+
+/// Returns the BYOND space environment settings for a managed positional listener update.
+/// Space echo is intentionally preserved even though BYOND echo/reverb interferes with explicit sound.pan.
+/proc/get_managed_positional_sound_effects(atom/source, mob/M, spaced_env, flags)
+	RETURN_TYPE(/list)
+	var/environment = null
+	var/echo = null
+
+	if (spaced_env && !(flags & SOUND_IGNORE_SPACE) && (isturf(source) || ismob(source) || !(M in source)))
+		environment = SPACED_ENV
+		echo = SPACED_ECHO
+
+	return list(
+		"environment" = environment,
+		"echo" = echo,
+	)
+
+/// Applies space environment settings, or clears a previously-applied space environment.
+/proc/apply_managed_positional_sound_effects(sound/S, environment, echo)
+	if (!S)
+		return
+
+	S.environment = isnull(environment) ? 0 : environment
+	if (!isnull(echo))
+		S.echo = echo
 
 /// One physical emitter for a managed positional sound token.
 /datum/managed_positional_sound_emitter
@@ -163,10 +210,6 @@ var/global/list/managed_positional_sound_channels = list()
 	var/update_volume_threshold = 1
 	/// Maximum stored-volume change per second when smoothing existing listeners.
 	var/volume_slew_per_second = 30
-	/// Maximum positional offset change per second when smoothing existing listeners.
-	var/position_slew_per_second = 6
-	/// Minimum positional offset change worth sending to BYOND.
-	var/position_deadzone = 0.1
 	/// Reserved BYOND channel used by this managed sound.
 	var/sound_channel = null
 	/// Whether this datum is still registered and sending updates.
@@ -182,16 +225,12 @@ var/global/list/managed_positional_sound_channels = list()
 	var/list/listeners = list()
 	/// Last stored, pre-client-preference volume sent for each listener.
 	var/list/client_stored_volumes = list()
-	/// Last x positional offset sent for each listener.
-	var/list/client_sound_x = list()
-	/// Last z positional offset sent for each listener.
-	var/list/client_sound_z = list()
+	/// Last explicit sound.pan value sent for each listener.
+	var/list/client_sound_pan = list()
 	/// Last BYOND environment sent for each listener.
 	var/list/client_environment = list()
 	/// Last echo settings sent for each listener.
 	var/list/client_echo = list()
-	/// world.time of the last positional update evaluation for each listener.
-	var/list/client_last_update_time = list()
 
 /datum/managed_positional_sound/New(atom/source, soundin, vol, vary = FALSE, extrarange = 0, pitch = 1, ignore_flag = 0, channel = VOLUME_CHANNEL_GAME, flags = 0, update_interval = MANAGED_POSITIONAL_SOUND_DEFAULT_UPDATE_INTERVAL, repeat = FALSE)
 	. = ..()
@@ -245,11 +284,9 @@ var/global/list/managed_positional_sound_channels = list()
 	src.sound_template = null
 	src.listeners = null
 	src.client_stored_volumes = null
-	src.client_sound_x = null
-	src.client_sound_z = null
+	src.client_sound_pan = null
 	src.client_environment = null
 	src.client_echo = null
-	src.client_last_update_time = null
 
 	. = ..()
 
@@ -435,7 +472,7 @@ var/global/list/managed_positional_sound_channels = list()
 	src.update_client_from_candidate(C, M, candidate, force)
 	return TRUE
 
-/// Returns one virtual listener candidate blended from every audible emitter in the provided set.
+/// Returns one listener candidate using loudest-emitter volume and blended multi-emitter direction.
 /datum/managed_positional_sound/proc/get_blended_candidate_for_client(client/C, mob/M, list/emitters)
 	RETURN_TYPE(/list)
 	if (!length(emitters))
@@ -450,9 +487,10 @@ var/global/list/managed_positional_sound_channels = list()
 			continue
 
 		candidates += list(candidate)
-		if (!loudest_candidate || candidate["stored_volume"] > loudest_volume)
+		var/stored_volume = candidate["stored_volume"]
+		if (!loudest_candidate || stored_volume > loudest_volume)
 			loudest_candidate = candidate
-			loudest_volume = candidate["stored_volume"]
+			loudest_volume = stored_volume
 
 	if (!loudest_candidate)
 		return null
@@ -460,51 +498,37 @@ var/global/list/managed_positional_sound_channels = list()
 	if (length(candidates) == 1)
 		return loudest_candidate
 
-	var/turf/Mloc = loudest_candidate["Mloc"]
-	var/volume_cap = max(src.volume * MANAGED_POSITIONAL_SOUND_BLEND_VOLUME_CAP_MULT, loudest_volume)
-	var/remaining_volume_fraction = 1
-	var/weighted_x = 0
-	var/weighted_z = 0
-	var/total_direction_weight = 0
+	// Grouped emitters are one logical sound, not multiple sounds stacking together. Volume therefore follows the loudest
+	// contributing emitter, while final pan is blended as a soft field from every audible emitter.
+	var/weighted_pan = 0
+	var/total_pan_weight = 0
 
 	for (var/list/candidate as anything in candidates)
 		var/stored_volume = candidate["stored_volume"]
-		var/normalized_volume = clamp(stored_volume / volume_cap, 0, 1)
-		remaining_volume_fraction *= (1 - normalized_volume)
-
 		var/edge_fade = get_managed_positional_sound_blend_edge_fade(candidate["dist"], candidate["max_range"])
-		var/direction_weight = stored_volume * stored_volume * edge_fade
-		if (direction_weight <= 0)
-			continue
+		// Blend bounded per-emitter pan values, not raw tile offsets. If we blend raw offsets first, far-apart
+		// emitters can saturate to opposite pan extremes and jump when the loudest emitter changes.
+		var/pan_weight = get_managed_positional_sound_pan_blend_weight(stored_volume, edge_fade)
+		if (pan_weight > 0)
+			weighted_pan += get_managed_positional_sound_output_pan(candidate["sound_x"] * MANAGED_POSITIONAL_SOUND_MULTI_EMITTER_PAN_SCALE) * pan_weight
+			total_pan_weight += pan_weight
 
-		weighted_x += candidate["sound_x"] * direction_weight
-		weighted_z += candidate["sound_z"] * direction_weight
-		total_direction_weight += direction_weight
-
-	var/combined_volume = volume_cap * (1 - remaining_volume_fraction)
-	if (combined_volume < TOO_QUIET)
-		return null
-
-	var/sound_x = loudest_candidate["sound_x"]
-	var/sound_z = loudest_candidate["sound_z"]
-	if (total_direction_weight > 0)
-		sound_x = weighted_x / total_direction_weight
-		sound_z = weighted_z / total_direction_weight
+	var/sound_pan = get_managed_positional_sound_output_pan(loudest_candidate["sound_x"] * MANAGED_POSITIONAL_SOUND_MULTI_EMITTER_PAN_SCALE)
+	if (total_pan_weight > 0)
+		sound_pan = weighted_pan / total_pan_weight
 
 	return list(
 		"emitter" = loudest_candidate["emitter"],
 		"source" = loudest_candidate["source"],
-		"stored_volume" = combined_volume,
-		"Mloc" = Mloc,
+		"stored_volume" = loudest_volume,
+		"Mloc" = loudest_candidate["Mloc"],
 		"source_turf" = loudest_candidate["source_turf"],
-		"source_location" = loudest_candidate["source_location"],
-		"listener_location" = loudest_candidate["listener_location"],
 		"spaced_env" = loudest_candidate["spaced_env"],
-		"sound_x" = sound_x,
-		"sound_z" = sound_z,
+		"sound_x" = loudest_candidate["sound_x"],
+		"sound_pan" = sound_pan,
 	)
 
-/// Returns one debug-only virtual sound field contribution at a turf, ignoring client preferences and mob hearing checks.
+/// Returns one debug-only sound field contribution at a turf, ignoring client preferences and mob hearing checks.
 /datum/managed_positional_sound/proc/get_debug_blended_field_for_turf(turf/listener_turf, list/emitters)
 	RETURN_TYPE(/list)
 	if (!listener_turf || !length(emitters))
@@ -519,57 +543,50 @@ var/global/list/managed_positional_sound_channels = list()
 			continue
 
 		candidates += list(candidate)
-		if (!loudest_candidate || candidate["stored_volume"] > loudest_volume)
+		var/stored_volume = candidate["stored_volume"]
+		if (!loudest_candidate || stored_volume > loudest_volume)
 			loudest_candidate = candidate
-			loudest_volume = candidate["stored_volume"]
+			loudest_volume = stored_volume
 
 	if (!loudest_candidate)
 		return null
 
 	if (length(candidates) == 1)
-		loudest_candidate["emitter_count"] = 1
-		loudest_candidate["volume_cap"] = max(src.volume * MANAGED_POSITIONAL_SOUND_BLEND_VOLUME_CAP_MULT, loudest_volume)
-		return loudest_candidate
+		return list(
+			"emitter" = loudest_candidate["emitter"],
+			"source" = loudest_candidate["source"],
+			"stored_volume" = loudest_volume,
+			"volume_cap" = max(src.volume, loudest_volume),
+			"emitter_count" = 1,
+			"source_turf" = loudest_candidate["source_turf"],
+			"sound_pan" = get_managed_positional_sound_output_pan(loudest_candidate["sound_x"]),
+		)
 
-	var/volume_cap = max(src.volume * MANAGED_POSITIONAL_SOUND_BLEND_VOLUME_CAP_MULT, loudest_volume)
-	var/remaining_volume_fraction = 1
-	var/weighted_x = 0
-	var/weighted_z = 0
-	var/total_direction_weight = 0
+	var/volume_cap = max(src.volume, loudest_volume)
+	var/weighted_pan = 0
+	var/total_pan_weight = 0
 
 	for (var/list/candidate as anything in candidates)
 		var/stored_volume = candidate["stored_volume"]
-		var/normalized_volume = clamp(stored_volume / volume_cap, 0, 1)
-		remaining_volume_fraction *= (1 - normalized_volume)
-
 		var/edge_fade = get_managed_positional_sound_blend_edge_fade(candidate["dist"], candidate["max_range"])
-		var/direction_weight = stored_volume * stored_volume * edge_fade
-		if (direction_weight <= 0)
-			continue
 
-		weighted_x += candidate["sound_x"] * direction_weight
-		weighted_z += candidate["sound_z"] * direction_weight
-		total_direction_weight += direction_weight
+		var/pan_weight = get_managed_positional_sound_pan_blend_weight(stored_volume, edge_fade)
+		if (pan_weight > 0)
+			weighted_pan += get_managed_positional_sound_output_pan(candidate["sound_x"] * MANAGED_POSITIONAL_SOUND_MULTI_EMITTER_PAN_SCALE) * pan_weight
+			total_pan_weight += pan_weight
 
-	var/combined_volume = volume_cap * (1 - remaining_volume_fraction)
-	if (combined_volume < TOO_QUIET)
-		return null
-
-	var/sound_x = loudest_candidate["sound_x"]
-	var/sound_z = loudest_candidate["sound_z"]
-	if (total_direction_weight > 0)
-		sound_x = weighted_x / total_direction_weight
-		sound_z = weighted_z / total_direction_weight
+	var/sound_pan = get_managed_positional_sound_output_pan(loudest_candidate["sound_x"] * MANAGED_POSITIONAL_SOUND_MULTI_EMITTER_PAN_SCALE)
+	if (total_pan_weight > 0)
+		sound_pan = weighted_pan / total_pan_weight
 
 	return list(
 		"emitter" = loudest_candidate["emitter"],
 		"source" = loudest_candidate["source"],
-		"stored_volume" = combined_volume,
+		"stored_volume" = loudest_volume,
 		"volume_cap" = volume_cap,
 		"emitter_count" = length(candidates),
 		"source_turf" = loudest_candidate["source_turf"],
-		"sound_x" = sound_x,
-		"sound_z" = sound_z,
+		"sound_pan" = sound_pan,
 	)
 
 /// Returns the loudest effective emitter candidate for a listener.
@@ -651,13 +668,10 @@ var/global/list/managed_positional_sound_channels = list()
 		"stored_volume" = ourvolume,
 		"Mloc" = Mloc,
 		"source_turf" = source_turf,
-		"source_location" = source_location,
-		"listener_location" = listener_location,
 		"spaced_env" = spaced_env,
 		"dist" = dist,
 		"max_range" = max_range,
 		"sound_x" = source_turf.x - Mloc.x,
-		"sound_z" = source_turf.y - Mloc.y,
 	)
 
 /// Returns this emitter's debug field contribution at a turf, or null if it does not contribute there.
@@ -717,7 +731,6 @@ var/global/list/managed_positional_sound_channels = list()
 		"dist" = dist,
 		"max_range" = max_range,
 		"sound_x" = source_turf.x - listener_turf.x,
-		"sound_z" = source_turf.y - listener_turf.y,
 	)
 
 /// Applies a precomputed listener candidate.
@@ -725,7 +738,7 @@ var/global/list/managed_positional_sound_channels = list()
 	if (!candidate)
 		return
 
-	src.update_client(C, M, candidate["Mloc"], candidate["source_turf"], candidate["source"], candidate["source_location"], candidate["listener_location"], candidate["stored_volume"], candidate["spaced_env"], force, candidate["sound_x"], candidate["sound_z"])
+	src.update_client(C, M, candidate["Mloc"], candidate["source_turf"], candidate["source"], candidate["stored_volume"], candidate["spaced_env"], force, candidate["sound_x"], candidate["sound_pan"])
 
 /// Sends the initial file-bearing packet for a silent listener prime.
 /datum/managed_positional_sound/proc/prime_client(client/C, mob/M, turf/Mloc, turf/source_turf)
@@ -734,9 +747,9 @@ var/global/list/managed_positional_sound_channels = list()
 
 	var/sound/S = src.create_start_sound()
 	S.volume = 0
-	S.x = source_turf.x - Mloc.x
-	S.z = source_turf.y - Mloc.y
-	S.y = 0
+	var/raw_sound_x = source_turf.x - Mloc.x
+	var/sound_pan = get_managed_positional_sound_output_pan(raw_sound_x)
+	apply_managed_positional_sound_output(S, sound_pan)
 
 	var/sound_offset = src.get_sound_offset()
 	if (!isnull(sound_offset))
@@ -746,16 +759,14 @@ var/global/list/managed_positional_sound_channels = list()
 
 	src.add_listener(C, M)
 	src.client_stored_volumes[C] = 0
-	src.client_sound_x[C] = S.x
-	src.client_sound_z[C] = S.z
+	src.client_sound_pan[C] = sound_pan
 	src.client_environment[C] = null
 	src.client_echo[C] = null
-	src.client_last_update_time[C] = world.time
 	C.sound_playing[src.sound_channel][1] = 0
 	C.sound_playing[src.sound_channel][2] = src.volume_channel
 
 /// Updates or starts this managed sound for one listener.
-/datum/managed_positional_sound/proc/update_client(client/C, mob/M, turf/Mloc, turf/source_turf, atom/source_atom, area/source_location, area/listener_location, stored_volume, spaced_env, force = FALSE, sound_x = null, sound_z = null)
+/datum/managed_positional_sound/proc/update_client(client/C, mob/M, turf/Mloc, turf/source_turf, atom/source_atom, stored_volume, spaced_env, force = FALSE, sound_x = null, sound_pan = null)
 	if (!C || !Mloc || !source_turf)
 		return
 
@@ -770,71 +781,60 @@ var/global/list/managed_positional_sound_channels = list()
 
 	if (isnull(sound_x))
 		sound_x = source_turf.x - Mloc.x
-	if (isnull(sound_z))
-		sound_z = source_turf.y - Mloc.y
-	if (already_playing)
-		var/delta_time = src.get_client_update_delta_seconds(C)
-		sound_x = src.smooth_sound_offset(src.client_sound_x[C], sound_x, delta_time)
-		sound_z = src.smooth_sound_offset(src.client_sound_z[C], sound_z, delta_time)
-	var/environment = 0
-	var/echo = null
-
-	if (spaced_env && !(src.flags & SOUND_IGNORE_SPACE) && (isturf(source_atom) || ismob(source_atom) || !(M in source_atom)))
-		environment = SPACED_ENV
-		echo = SPACED_ECHO
-	else if (listener_location != source_location)
-		echo = ECHO_AFAR
-	else
-		echo = ECHO_CLOSE
-
+	if (isnull(sound_pan))
+		sound_pan = get_managed_positional_sound_output_pan(sound_x)
+	var/list/sound_effects = get_managed_positional_sound_effects(source_atom, M, spaced_env, src.flags)
+	var/environment = sound_effects["environment"]
+	var/echo = sound_effects["echo"]
+	var/last_environment = src.client_environment[C]
+	var/last_echo = src.client_echo[C]
+	var/effects_changed = (last_environment != environment || last_echo != echo)
+	var/should_apply_effects = !isnull(environment) || !isnull(echo) || !isnull(last_environment) || !isnull(last_echo)
 	if (!force && already_playing)
-		var/last_volume = src.client_stored_volumes[C]
-		if (abs(stored_volume - last_volume) < src.update_volume_threshold \
-			&& src.client_sound_x[C] == sound_x \
-			&& src.client_sound_z[C] == sound_z \
-			&& src.client_environment[C] == environment \
-			&& src.client_echo[C] == echo)
+		if (abs(stored_volume - src.client_stored_volumes[C]) < src.update_volume_threshold \
+			&& src.client_sound_pan[C] == sound_pan \
+			&& last_environment == environment \
+			&& last_echo == echo)
 			return
 
 	src.add_listener(C, M)
 	src.client_stored_volumes[C] = stored_volume
-	src.client_sound_x[C] = sound_x
-	src.client_sound_z[C] = sound_z
+	src.client_sound_pan[C] = sound_pan
 	src.client_environment[C] = environment
 	src.client_echo[C] = echo
-	src.client_last_update_time[C] = world.time
 
 	C.sound_playing[src.sound_channel][1] = stored_volume
 	C.sound_playing[src.sound_channel][2] = src.volume_channel
 
+	if (already_playing && effects_changed)
+		C << sound(null, wait = FALSE, channel = src.sound_channel)
+
 	var/sound/S
-	if (already_playing)
+	if (already_playing && !effects_changed)
 		S = sound(null, wait = FALSE, channel = src.sound_channel)
 		S.status = SOUND_UPDATE
 		S.repeat = src.repeat
 	else
 		S = src.create_start_sound()
 	S.volume = final_volume
-	S.environment = environment
-	S.echo = echo
-	S.x = sound_x
-	S.z = sound_z
-	S.y = 0
+	if (should_apply_effects)
+		apply_managed_positional_sound_effects(S, environment, echo)
+	apply_managed_positional_sound_output(S, sound_pan)
 
 	var/sound_offset = src.get_sound_offset()
 	if (!isnull(sound_offset))
 		S.offset = sound_offset
 
 	var/orig_freq
-	if (!already_playing)
+	if (!already_playing || effects_changed)
 		orig_freq = S.frequency
 		S.frequency *= (HAS_ATOM_PROPERTY(M, PROP_MOB_HEARD_PITCH) ? GET_ATOM_PROPERTY(M, PROP_MOB_HEARD_PITCH) : 1)
 
 	C << S
 	if (!already_playing)
-		src.send_update_sound(C, final_volume, environment, echo, sound_x, sound_z, sound_offset)
+		src.send_update_sound(C, final_volume, sound_pan, environment, echo, should_apply_effects, sound_offset)
 
-	if (!already_playing)
+	if (!already_playing || effects_changed)
 		S.frequency = orig_freq
 		S.offset = 0
 
@@ -843,22 +843,19 @@ var/global/list/managed_positional_sound_channels = list()
 	var/sound/S = sound(src.sound_template.file, wait = FALSE, channel = src.sound_channel)
 	S.repeat = src.repeat
 	S.status = 0
-	S.falloff = src.sound_template.falloff
 	S.priority = src.sound_template.priority
 	S.frequency = src.sound_template.frequency
 	return S
 
 /// Sends a fileless SOUND_UPDATE packet for an already-started managed sound channel.
-/datum/managed_positional_sound/proc/send_update_sound(client/C, volume, environment, echo, sound_x, sound_z, sound_offset = null)
+/datum/managed_positional_sound/proc/send_update_sound(client/C, volume, sound_pan, environment, echo, apply_effects = FALSE, sound_offset = null)
 	var/sound/S = sound(null, wait = FALSE, channel = src.sound_channel)
 	S.status = SOUND_UPDATE
 	S.repeat = src.repeat
 	S.volume = volume
-	S.environment = environment
-	S.echo = echo
-	S.x = sound_x
-	S.z = sound_z
-	S.y = 0
+	if (apply_effects)
+		apply_managed_positional_sound_effects(S, environment, echo)
+	apply_managed_positional_sound_output(S, sound_pan)
 	if (!isnull(sound_offset))
 		S.offset = sound_offset
 	C << S
@@ -880,13 +877,12 @@ var/global/list/managed_positional_sound_channels = list()
 	if (stored_volume < TOO_QUIET)
 		stored_volume = 0
 
+	var/environment = src.client_environment[C]
+	var/echo = src.client_echo[C]
+	var/should_apply_effects = !isnull(environment) || !isnull(echo)
 	src.client_stored_volumes[C] = stored_volume
 	if (!stored_volume)
-		src.client_sound_x[C] = null
-		src.client_sound_z[C] = null
-		src.client_environment[C] = null
-		src.client_echo[C] = null
-		src.client_last_update_time[C] = world.time
+		src.client_sound_pan[C] = null
 
 	C.sound_playing[src.sound_channel][1] = stored_volume
 	C.sound_playing[src.sound_channel][2] = src.volume_channel
@@ -895,11 +891,12 @@ var/global/list/managed_positional_sound_channels = list()
 	S.status = SOUND_UPDATE
 	S.repeat = src.repeat
 	S.volume = stored_volume * C.getVolume(src.volume_channel) / 100
+	if (should_apply_effects)
+		apply_managed_positional_sound_effects(S, environment, echo)
 	var/sound_offset = src.get_sound_offset()
 	if (!isnull(sound_offset))
 		S.offset = sound_offset
 	C << S
-	src.client_last_update_time[C] = world.time
 
 /// Tracks a client as an active listener and attaches movement/logout signals to its current mob.
 /datum/managed_positional_sound/proc/add_listener(client/C, mob/M)
@@ -917,26 +914,6 @@ var/global/list/managed_positional_sound_channels = list()
 	var/max_delta = max(src.volume_slew_per_second * (src.update_interval / 1 SECOND), src.update_volume_threshold)
 	return current_volume + clamp(target_volume - current_volume, -max_delta, max_delta)
 
-/// Returns elapsed seconds since the last positional update evaluation and advances the slew clock.
-/datum/managed_positional_sound/proc/get_client_update_delta_seconds(client/C)
-	var/last_update_time = src.client_last_update_time[C]
-	src.client_last_update_time[C] = world.time
-	if (isnull(last_update_time))
-		return src.update_interval / (1 SECOND)
-
-	return max((world.time - last_update_time) / (1 SECOND), MANAGED_POSITIONAL_SOUND_PROCESS_INTERVAL / (1 SECOND))
-
-/// Steps a positional sound offset toward its target to avoid abrupt stereo pan changes.
-/datum/managed_positional_sound/proc/smooth_sound_offset(current_offset, target_offset, delta_time)
-	if (isnull(current_offset))
-		return target_offset
-
-	if (abs(target_offset - current_offset) <= src.position_deadzone)
-		return current_offset
-
-	var/max_delta = max(src.position_slew_per_second * delta_time, src.position_deadzone)
-	return current_offset + clamp(target_offset - current_offset, -max_delta, max_delta)
-
 /// Fully stops this sound for a client and clears all per-listener tracking state.
 /datum/managed_positional_sound/proc/stop_client(client/C)
 	if (!C)
@@ -951,8 +928,6 @@ var/global/list/managed_positional_sound_channels = list()
 	src.listeners -= C
 	global.managed_positional_sound_process?.unregister_client_sound(C, src)
 	src.client_stored_volumes -= C
-	src.client_sound_x -= C
-	src.client_sound_z -= C
+	src.client_sound_pan -= C
 	src.client_environment -= C
 	src.client_echo -= C
-	src.client_last_update_time -= C

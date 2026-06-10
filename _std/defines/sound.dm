@@ -49,12 +49,23 @@
 #define MANAGED_POSITIONAL_SOUND_DEFAULT_UPDATE_INTERVAL 1 DECI SECOND
 /// Minimum allowed interval between managed positional sound updates.
 #define MANAGED_POSITIONAL_SOUND_MIN_UPDATE_INTERVAL 1 DECI SECOND
+/// Shape scalar for managed positional distance falloff. Matches the legacy playsound() curve without changing playsound().
+#define MANAGED_POSITIONAL_SOUND_FALLOFF_SHAPE 1.0542
+/// Normalized distance where managed positional falloff drops most sharply.
+#define MANAGED_POSITIONAL_SOUND_FALLOFF_MIDPOINT 0.18
+/// Exponent for managed positional distance falloff.
+#define MANAGED_POSITIONAL_SOUND_FALLOFF_EXPONENT -1.7
 /// Fraction of a managed positional sound's range used to fade emitter blend weight near the edge.
 #define MANAGED_POSITIONAL_SOUND_BLEND_EDGE_FRACTION 0.15
 /// Minimum edge-fade width, in tiles, for managed positional sound emitter blending.
 #define MANAGED_POSITIONAL_SOUND_BLEND_MIN_EDGE_WIDTH 3
-/// Maximum blended volume relative to the managed sound's base volume.
-#define MANAGED_POSITIONAL_SOUND_BLEND_VOLUME_CAP_MULT 1.35
+/// Left/right intent scale for multi-emitter sounds, reducing perceived loudness differences caused by hard stereo pan.
+/// Centered positional audio is perceptually louder than hard-panned audio, so grouped emitters use a narrower stereo field to mitigate.
+#define MANAGED_POSITIONAL_SOUND_MULTI_EMITTER_PAN_SCALE 0.5
+/// Explicit sound.pan units per tile of managed positional left/right intent. This is an output scale, not an adjacent-tile delta cap.
+#define MANAGED_POSITIONAL_SOUND_EXPLICIT_PAN_PER_TILE 15
+/// Maximum absolute explicit sound.pan sent by managed positional sounds.
+#define MANAGED_POSITIONAL_SOUND_MAX_EXPLICIT_PAN 80
 
 #define SOUNDCHANNEL_RADIO 1013
 #define SOUNDCHANNEL_ADMIN_LOW 1014 // lower end of the range of admin channels

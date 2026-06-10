@@ -781,7 +781,7 @@ proc/debug_map_apc_count(delim,zlim)
 		name = "managed positional sounds"
 		help = {"Shows managed positional sound emitter fields.<br>
 		Brighter tiles have a stronger blended field.<br>
-		Numbers show blended stored volume. E# marks emitter turfs."}
+		Numbers show blended stored volume. Tooltips show final pan. E# marks emitter turfs."}
 		restricted = 1
 
 		var/datum/controller/process/managed_positional_sounds/sound_process
@@ -831,9 +831,8 @@ proc/debug_map_apc_count(delim,zlim)
 				if (length(desc_lines) < 8)
 					var/field_volume = round(field["stored_volume"], 0.1)
 					var/field_emitters = field["emitter_count"]
-					var/field_sound_x = round(field["sound_x"], 0.1)
-					var/field_sound_z = round(field["sound_z"], 0.1)
-					desc_lines += "\ref[managed_sound] ch[managed_sound.sound_channel] vol [field_volume] emitters [field_emitters] virtual ([field_sound_x], [field_sound_z])"
+					var/field_sound_pan = round(field["sound_pan"], 0.1)
+					desc_lines += "\ref[managed_sound] ch[managed_sound.sound_channel] vol [field_volume] emitters [field_emitters] pan [field_sound_pan]"
 
 			if (!best_field)
 				img.app.alpha = 0
