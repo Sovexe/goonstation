@@ -97,12 +97,21 @@ var/global/list/managed_positional_sound_channels = list()
 /proc/get_managed_positional_sound_output_pan(sound_x)
 	return clamp(sound_x * MANAGED_POSITIONAL_SOUND_EXPLICIT_PAN_PER_TILE, -MANAGED_POSITIONAL_SOUND_MAX_EXPLICIT_PAN, MANAGED_POSITIONAL_SOUND_MAX_EXPLICIT_PAN)
 
-/// Applies the already-finalized managed positional pan to a BYOND sound.
-/proc/apply_managed_positional_sound_output(sound/S, sound_pan)
+/// Applies the finalized managed positional output to a BYOND sound.
+/// Normal managed sounds use explicit sound.pan; space echo/environment uses BYOND 3D offsets because those effects require 3D sounds.
+/proc/apply_managed_positional_sound_output(sound/S, sound_pan, sound_x = null, sound_z = null, use_3d_output = FALSE)
 	if (!S)
 		return
 
-	S.pan = sound_pan
+	if (use_3d_output)
+		S.x = sound_x
+		S.z = sound_z
+		S.y = 0
+	else
+		S.x = 0
+		S.z = 0
+		S.y = 0
+		S.pan = sound_pan
 
 /// Returns the BYOND space environment settings for a managed positional listener update.
 /// Space echo is intentionally preserved even though BYOND echo/reverb interferes with explicit sound.pan.
@@ -125,9 +134,20 @@ var/global/list/managed_positional_sound_channels = list()
 	if (!S)
 		return
 
-	S.environment = isnull(environment) ? 0 : environment
+	S.environment = isnull(environment) ? -1 : environment
 	if (!isnull(echo))
 		S.echo = echo
+
+/// Explicitly clears BYOND environment/echo state from a managed positional sound channel.
+/proc/clear_managed_positional_sound_effects(sound/S)
+	if (!S)
+		return
+
+	S.environment = -1
+	S.echo = ECHO_CLOSE
+	S.x = 0
+	S.y = 0
+	S.z = 0
 
 /// One physical emitter for a managed positional sound token.
 /datum/managed_positional_sound_emitter
@@ -227,6 +247,10 @@ var/global/list/managed_positional_sound_channels = list()
 	var/list/client_stored_volumes = list()
 	/// Last explicit sound.pan value sent for each listener.
 	var/list/client_sound_pan = list()
+	/// Last x positional offset sent while BYOND 3D output was active for a listener.
+	var/list/client_sound_x = list()
+	/// Last z positional offset sent while BYOND 3D output was active for a listener.
+	var/list/client_sound_z = list()
 	/// Last BYOND environment sent for each listener.
 	var/list/client_environment = list()
 	/// Last echo settings sent for each listener.
@@ -285,6 +309,8 @@ var/global/list/managed_positional_sound_channels = list()
 	src.listeners = null
 	src.client_stored_volumes = null
 	src.client_sound_pan = null
+	src.client_sound_x = null
+	src.client_sound_z = null
 	src.client_environment = null
 	src.client_echo = null
 
@@ -472,7 +498,7 @@ var/global/list/managed_positional_sound_channels = list()
 	src.update_client_from_candidate(C, M, candidate, force)
 	return TRUE
 
-/// Returns one listener candidate using loudest-emitter volume and blended multi-emitter direction.
+/// Returns one listener candidate using loudest-emitter volume and blended multi-emitter pan.
 /datum/managed_positional_sound/proc/get_blended_candidate_for_client(client/C, mob/M, list/emitters)
 	RETURN_TYPE(/list)
 	if (!length(emitters))
@@ -781,18 +807,22 @@ var/global/list/managed_positional_sound_channels = list()
 
 	if (isnull(sound_x))
 		sound_x = source_turf.x - Mloc.x
+	var/sound_z = source_turf.y - Mloc.y
 	if (isnull(sound_pan))
 		sound_pan = get_managed_positional_sound_output_pan(sound_x)
 	var/list/sound_effects = get_managed_positional_sound_effects(source_atom, M, spaced_env, src.flags)
 	var/environment = sound_effects["environment"]
 	var/echo = sound_effects["echo"]
+	var/use_3d_output = !isnull(environment) || !isnull(echo)
 	var/last_environment = src.client_environment[C]
 	var/last_echo = src.client_echo[C]
-	var/effects_changed = (last_environment != environment || last_echo != echo)
-	var/should_apply_effects = !isnull(environment) || !isnull(echo) || !isnull(last_environment) || !isnull(last_echo)
+	var/should_apply_effects = !isnull(environment) || !isnull(echo)
+	var/should_clear_effects = !should_apply_effects && (!isnull(last_environment) || !isnull(last_echo))
 	if (!force && already_playing)
 		if (abs(stored_volume - src.client_stored_volumes[C]) < src.update_volume_threshold \
 			&& src.client_sound_pan[C] == sound_pan \
+			&& src.client_sound_x[C] == (use_3d_output ? sound_x : null) \
+			&& src.client_sound_z[C] == (use_3d_output ? sound_z : null) \
 			&& last_environment == environment \
 			&& last_echo == echo)
 			return
@@ -800,17 +830,20 @@ var/global/list/managed_positional_sound_channels = list()
 	src.add_listener(C, M)
 	src.client_stored_volumes[C] = stored_volume
 	src.client_sound_pan[C] = sound_pan
+	src.client_sound_x[C] = use_3d_output ? sound_x : null
+	src.client_sound_z[C] = use_3d_output ? sound_z : null
 	src.client_environment[C] = environment
 	src.client_echo[C] = echo
 
 	C.sound_playing[src.sound_channel][1] = stored_volume
 	C.sound_playing[src.sound_channel][2] = src.volume_channel
 
-	if (already_playing && effects_changed)
-		C << sound(null, wait = FALSE, channel = src.sound_channel)
+	var/sound_offset = src.get_sound_offset()
+	if (already_playing && should_clear_effects)
+		src.send_clear_effects_sound(C, final_volume, sound_offset)
 
 	var/sound/S
-	if (already_playing && !effects_changed)
+	if (already_playing)
 		S = sound(null, wait = FALSE, channel = src.sound_channel)
 		S.status = SOUND_UPDATE
 		S.repeat = src.repeat
@@ -819,24 +852,34 @@ var/global/list/managed_positional_sound_channels = list()
 	S.volume = final_volume
 	if (should_apply_effects)
 		apply_managed_positional_sound_effects(S, environment, echo)
-	apply_managed_positional_sound_output(S, sound_pan)
+	apply_managed_positional_sound_output(S, sound_pan, sound_x, sound_z, use_3d_output)
 
-	var/sound_offset = src.get_sound_offset()
 	if (!isnull(sound_offset))
 		S.offset = sound_offset
 
 	var/orig_freq
-	if (!already_playing || effects_changed)
+	if (!already_playing)
 		orig_freq = S.frequency
 		S.frequency *= (HAS_ATOM_PROPERTY(M, PROP_MOB_HEARD_PITCH) ? GET_ATOM_PROPERTY(M, PROP_MOB_HEARD_PITCH) : 1)
 
 	C << S
 	if (!already_playing)
-		src.send_update_sound(C, final_volume, sound_pan, environment, echo, should_apply_effects, sound_offset)
+		src.send_update_sound(C, final_volume, sound_pan, sound_x, sound_z, use_3d_output, environment, echo, should_apply_effects, sound_offset)
 
-	if (!already_playing || effects_changed)
+	if (!already_playing)
 		S.frequency = orig_freq
 		S.offset = 0
+
+/// Sends a fileless SOUND_UPDATE packet to clear BYOND environment/echo state before returning to explicit pan output.
+/datum/managed_positional_sound/proc/send_clear_effects_sound(client/C, volume, sound_offset = null)
+	var/sound/S = sound(null, wait = FALSE, channel = src.sound_channel)
+	S.status = SOUND_UPDATE
+	S.repeat = src.repeat
+	S.volume = volume
+	clear_managed_positional_sound_effects(S)
+	if (!isnull(sound_offset))
+		S.offset = sound_offset
+	C << S
 
 /// Builds the initial file-bearing sound packet for a listener.
 /datum/managed_positional_sound/proc/create_start_sound()
@@ -848,14 +891,14 @@ var/global/list/managed_positional_sound_channels = list()
 	return S
 
 /// Sends a fileless SOUND_UPDATE packet for an already-started managed sound channel.
-/datum/managed_positional_sound/proc/send_update_sound(client/C, volume, sound_pan, environment, echo, apply_effects = FALSE, sound_offset = null)
+/datum/managed_positional_sound/proc/send_update_sound(client/C, volume, sound_pan, sound_x, sound_z, use_3d_output, environment, echo, apply_effects = FALSE, sound_offset = null)
 	var/sound/S = sound(null, wait = FALSE, channel = src.sound_channel)
 	S.status = SOUND_UPDATE
 	S.repeat = src.repeat
 	S.volume = volume
 	if (apply_effects)
 		apply_managed_positional_sound_effects(S, environment, echo)
-	apply_managed_positional_sound_output(S, sound_pan)
+	apply_managed_positional_sound_output(S, sound_pan, sound_x, sound_z, use_3d_output)
 	if (!isnull(sound_offset))
 		S.offset = sound_offset
 	C << S
@@ -883,6 +926,8 @@ var/global/list/managed_positional_sound_channels = list()
 	src.client_stored_volumes[C] = stored_volume
 	if (!stored_volume)
 		src.client_sound_pan[C] = null
+		src.client_sound_x[C] = null
+		src.client_sound_z[C] = null
 
 	C.sound_playing[src.sound_channel][1] = stored_volume
 	C.sound_playing[src.sound_channel][2] = src.volume_channel
@@ -929,5 +974,7 @@ var/global/list/managed_positional_sound_channels = list()
 	global.managed_positional_sound_process?.unregister_client_sound(C, src)
 	src.client_stored_volumes -= C
 	src.client_sound_pan -= C
+	src.client_sound_x -= C
+	src.client_sound_z -= C
 	src.client_environment -= C
 	src.client_echo -= C
