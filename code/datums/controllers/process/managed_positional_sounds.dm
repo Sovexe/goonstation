@@ -222,8 +222,11 @@ var/global/list/pending_managed_positional_sounds = list()
 			src.unregister_emitter(emitter)
 
 		for (var/client/C as anything in src.client_sounds.Copy())
-			src.client_sounds[C] -= managed_sound
-			if (!length(src.client_sounds[C]))
+			var/list/tracked_sounds = src.client_sounds[C]
+			if (isnull(tracked_sounds))
+				stack_trace("Managed positional sound process had a null client_sounds entry for [C] while unregistering [managed_sound].")
+			tracked_sounds -= managed_sound
+			if (!length(tracked_sounds))
 				src.client_sounds -= C
 
 		src.rebuild_max_query_range()
@@ -277,8 +280,13 @@ var/global/list/pending_managed_positional_sounds = list()
 	proc/unregister_client_sound(client/C, datum/managed_positional_sound/managed_sound)
 		if (!C || !managed_sound)
 			return
-		src.client_sounds[C] -= managed_sound
-		if (!length(src.client_sounds[C]))
+		if (!(C in src.client_sounds))
+			return
+		var/list/tracked_sounds = src.client_sounds[C]
+		if (isnull(tracked_sounds))
+			stack_trace("Managed positional sound process had a null client_sounds entry for [C] while unregistering [managed_sound].")
+		tracked_sounds -= managed_sound
+		if (!length(tracked_sounds))
 			src.client_sounds -= C
 
 	/// Queues one client for listener-driven sound recalculation.
@@ -411,7 +419,11 @@ var/global/list/pending_managed_positional_sounds = list()
 
 	/// Mutes every managed sound currently tracked for one client.
 	proc/mute_client_sounds(client/C, stop = FALSE)
+		if (!(C in src.client_sounds))
+			return
 		var/list/tracked_sounds = src.client_sounds[C]
+		if (isnull(tracked_sounds))
+			stack_trace("Managed positional sound process had a null client_sounds entry for [C] while muting client sounds.")
 		for (var/datum/managed_positional_sound/managed_sound as anything in tracked_sounds?.Copy())
 			if (stop)
 				managed_sound.stop_client(C)

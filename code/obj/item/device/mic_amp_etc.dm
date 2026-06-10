@@ -163,7 +163,7 @@ TYPEINFO(/obj/machinery/loudspeaker)
 	/// Maximum distance to search for passive demo emitters when starting.
 	var/emitter_search_range = 15
 	/// Active managed positional sound datum owned by this speaker.
-	var/datum/managed_positional_sound/sound_loop = null
+	var/datum/managed_positional_sound/managed_sound_loop = null
 
 /obj/machinery/loudspeaker/positional_multi_emitter_demo/New()
 	. = ..()
@@ -177,7 +177,7 @@ TYPEINFO(/obj/machinery/loudspeaker)
 	. = ..()
 
 /obj/machinery/loudspeaker/positional_multi_emitter_demo/attack_hand(mob/user)
-	if (src.sound_loop)
+	if (src.managed_sound_loop)
 		src.stop_sound_loop()
 		user?.show_text("You switch [src] off.")
 	else
@@ -194,11 +194,11 @@ TYPEINFO(/obj/machinery/loudspeaker)
 
 /// Starts this demo speaker's looping managed positional sound and attaches passive demo speakers as emitters.
 /obj/machinery/loudspeaker/positional_multi_emitter_demo/proc/start_sound_loop()
-	if (src.sound_loop || (src.status & BROKEN) || !src.loop_sound)
+	if (src.managed_sound_loop || (src.status & BROKEN) || !src.loop_sound)
 		return FALSE
 
-	src.sound_loop = play_managed_positional_sound(src, src.loop_sound, src.loop_volume, FALSE, src.loop_extrarange, 1, 0, src.loop_volume_channel, src.loop_flags, src.loop_update_interval, TRUE)
-	if (!src.sound_loop)
+	src.managed_sound_loop = play_managed_positional_sound(src, src.loop_sound, src.loop_volume, FALSE, src.loop_extrarange, 1, 0, src.loop_volume_channel, src.loop_flags, src.loop_update_interval, TRUE)
+	if (!src.managed_sound_loop)
 		return FALSE
 
 	src.refresh_emitters()
@@ -206,7 +206,7 @@ TYPEINFO(/obj/machinery/loudspeaker)
 
 /// Rebuilds this demo sound's passive emitter list.
 /obj/machinery/loudspeaker/positional_multi_emitter_demo/proc/refresh_emitters()
-	if (!src.sound_loop)
+	if (!src.managed_sound_loop)
 		return 0
 
 	var/emitters_added = 0
@@ -217,18 +217,18 @@ TYPEINFO(/obj/machinery/loudspeaker)
 			continue
 		if (emitter.status & BROKEN)
 			continue
-		src.sound_loop.add_emitter(emitter)
+		src.managed_sound_loop.add_emitter(emitter)
 		emitters_added++
 
 	return emitters_added
 
 /// Stops this demo speaker's active managed positional sound.
 /obj/machinery/loudspeaker/positional_multi_emitter_demo/proc/stop_sound_loop()
-	if (!src.sound_loop)
+	if (!src.managed_sound_loop)
 		return FALSE
 
-	src.sound_loop.stop()
-	src.sound_loop = null
+	src.managed_sound_loop.stop()
+	src.managed_sound_loop = null
 	return TRUE
 
 /// Passive multi-emitter demo node. Place these near a multi-emitter demo speaker. Toggle it on and off and they should link up
