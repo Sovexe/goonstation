@@ -222,7 +222,7 @@ ADMIN_INTERACT_PROCS(/mob/living/critter/small_animal/mouse, proc/glorp)
 		HH.can_hold_items = 0
 
 	attackby(obj/item/reagent_containers/food/food, mob/user)
-		if (!istype(food))
+		if (!istype(food) && !istype(food, /obj/item/organ))
 			return ..()
 		if (ON_COOLDOWN(src, "consider_food", 5 SECONDS))
 			return
@@ -253,6 +253,9 @@ ADMIN_INTERACT_PROCS(/mob/living/critter/small_animal/mouse, proc/glorp)
 					FLICK("remy-exclaim", src)
 					return SPAN_EMOTE("<b>[src]</b> squeaks!")
 		return ..()
+
+	home_area()
+		return /area/station/crew_quarters/kitchen
 
 /* =============================================== */
 /* ----------- mentor & admin mice --------------- */
