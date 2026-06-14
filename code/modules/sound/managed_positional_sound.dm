@@ -224,6 +224,8 @@ var/global/list/managed_positional_sound_channels = list()
 	var/flags = 0
 	/// Whether the sound should loop on the client. One-shot sounds are the default.
 	var/repeat = FALSE
+	/// Whether playback is currently paused on listener clients.
+	var/paused = FALSE
 	/// Maximum periodic update delay. Movement signals can still force earlier updates.
 	var/update_interval = MANAGED_POSITIONAL_SOUND_DEFAULT_UPDATE_INTERVAL
 	/// Minimum stored-volume change needed before an update packet is worth sending.
@@ -236,9 +238,11 @@ var/global/list/managed_positional_sound_channels = list()
 	var/active = FALSE
 	/// world.time when playback conceptually began, used to synchronize late listeners.
 	var/start_time = 0
+	/// world.time when the current pause began, used to preserve synchronized offsets while paused.
+	var/pause_started_time = 0
 	/// Earliest world.time this sound should receive its next periodic update.
 	var/next_update_time = 0
-	/// Cached BYOND sound length in seconds. Zero means BYOND did not report one.
+	/// Cached BYOND sound length. Zero means BYOND did not report one.
 	var/sound_duration = 0
 
 	/// Clients that have received this managed sound and need updates or muting.
@@ -325,6 +329,33 @@ var/global/list/managed_positional_sound_channels = list()
 	src.volume = vol
 	src.mark_dirty()
 
+/// Sets the pitch/frequency multiplier for future starts and current listeners.
+/datum/managed_positional_sound/proc/set_pitch(pitch)
+	if (!pitch)
+		pitch = 1
+	src.pitch = pitch
+	if (src.sound_template)
+		src.sound_template.frequency = src.pitch
+	src.send_control_update_to_listeners()
+	src.mark_dirty()
+
+/// Pauses or resumes current listener channels while preserving this token's synchronized timeline.
+/datum/managed_positional_sound/proc/set_paused(paused)
+	paused = paused ? TRUE : FALSE
+	if (src.paused == paused)
+		return FALSE
+
+	src.paused = paused
+	if (src.paused)
+		src.pause_started_time = world.time
+	else
+		src.start_time += world.time - src.pause_started_time
+		src.pause_started_time = 0
+
+	src.send_control_update_to_listeners()
+	src.mark_dirty()
+	return TRUE
+
 /// Moves this managed sound to a new source and immediately recalculates listeners.
 /datum/managed_positional_sound/proc/set_source(atom/source)
 	src.clear_emitters()
@@ -394,9 +425,12 @@ var/global/list/managed_positional_sound_channels = list()
 /datum/managed_positional_sound/proc/is_finished()
 	return !src.repeat && src.sound_duration && (src.get_elapsed_seconds() >= src.sound_duration)
 
-/// Returns elapsed wall-clock playback time in BYOND sound seconds.
+/// Returns elapsed wall-clock playback time in seconds, matching BYOND sound len/offset units.
 /datum/managed_positional_sound/proc/get_elapsed_seconds()
-	return (world.time - src.start_time) / (1 SECOND)
+	var/reference_time = src.paused ? src.pause_started_time : world.time
+	if (!reference_time)
+		reference_time = world.time
+	return max((reference_time - src.start_time) / (1 SECOND), 0)
 
 /// Returns the expected BYOND sound offset for the current world time, or null if the sound length is unknown.
 /datum/managed_positional_sound/proc/get_sound_offset()
@@ -845,7 +879,7 @@ var/global/list/managed_positional_sound_channels = list()
 	var/sound/S
 	if (already_playing)
 		S = sound(null, wait = FALSE, channel = src.sound_channel)
-		S.status = SOUND_UPDATE
+		S.status = src.get_sound_status(TRUE)
 		S.repeat = src.repeat
 	else
 		S = src.create_start_sound()
@@ -873,7 +907,7 @@ var/global/list/managed_positional_sound_channels = list()
 /// Sends a fileless SOUND_UPDATE packet to clear BYOND environment/echo state before returning to explicit pan output.
 /datum/managed_positional_sound/proc/send_clear_effects_sound(client/C, volume, sound_offset = null)
 	var/sound/S = sound(null, wait = FALSE, channel = src.sound_channel)
-	S.status = SOUND_UPDATE
+	S.status = src.get_sound_status(TRUE)
 	S.repeat = src.repeat
 	S.volume = volume
 	clear_managed_positional_sound_effects(S)
@@ -885,17 +919,26 @@ var/global/list/managed_positional_sound_channels = list()
 /datum/managed_positional_sound/proc/create_start_sound()
 	var/sound/S = sound(src.sound_template.file, wait = FALSE, channel = src.sound_channel)
 	S.repeat = src.repeat
-	S.status = 0
+	S.status = src.get_sound_status()
 	S.priority = src.sound_template.priority
 	S.frequency = src.sound_template.frequency
 	return S
 
+/// Returns the BYOND sound status flags appropriate for this token's paused state.
+/datum/managed_positional_sound/proc/get_sound_status(update = FALSE)
+	var/status = update ? SOUND_UPDATE : 0
+	if (src.paused)
+		status |= SOUND_PAUSED
+	return status
+
 /// Sends a fileless SOUND_UPDATE packet for an already-started managed sound channel.
 /datum/managed_positional_sound/proc/send_update_sound(client/C, volume, sound_pan, sound_x, sound_z, use_3d_output, environment, echo, apply_effects = FALSE, sound_offset = null)
 	var/sound/S = sound(null, wait = FALSE, channel = src.sound_channel)
-	S.status = SOUND_UPDATE
+	S.status = src.get_sound_status(TRUE)
 	S.repeat = src.repeat
 	S.volume = volume
+	if (src.sound_template)
+		S.frequency = src.sound_template.frequency
 	if (apply_effects)
 		apply_managed_positional_sound_effects(S, environment, echo)
 	apply_managed_positional_sound_output(S, sound_pan, sound_x, sound_z, use_3d_output)
@@ -933,7 +976,7 @@ var/global/list/managed_positional_sound_channels = list()
 	C.sound_playing[src.sound_channel][2] = src.volume_channel
 
 	var/sound/S = sound(null, wait = FALSE, channel = src.sound_channel)
-	S.status = SOUND_UPDATE
+	S.status = src.get_sound_status(TRUE)
 	S.repeat = src.repeat
 	S.volume = stored_volume * C.getVolume(src.volume_channel) / 100
 	if (should_apply_effects)
@@ -942,6 +985,28 @@ var/global/list/managed_positional_sound_channels = list()
 	if (!isnull(sound_offset))
 		S.offset = sound_offset
 	C << S
+
+/// Sends pause/resume/pitch/offset state to every client already tracking this sound.
+/datum/managed_positional_sound/proc/send_control_update_to_listeners()
+	for (var/client/C as anything in src.listeners.Copy())
+		src.send_control_update(C)
+
+/// Sends pause/resume/pitch/offset state to one current listener without recalculating its position.
+/datum/managed_positional_sound/proc/send_control_update(client/C)
+	if (!C || !(C in src.listeners))
+		return
+
+	var/sound_pan = src.client_sound_pan[C]
+	if (isnull(sound_pan))
+		sound_pan = 0
+	var/environment = src.client_environment[C]
+	var/echo = src.client_echo[C]
+	var/use_3d_output = !isnull(environment) || !isnull(echo)
+	var/stored_volume = src.client_stored_volumes[C]
+	if (isnull(stored_volume))
+		stored_volume = 0
+
+	src.send_update_sound(C, stored_volume * C.getVolume(src.volume_channel) / 100, sound_pan, src.client_sound_x[C], src.client_sound_z[C], use_3d_output, environment, echo, use_3d_output, src.get_sound_offset())
 
 /// Tracks a client as an active listener and attaches movement/logout signals to its current mob.
 /datum/managed_positional_sound/proc/add_listener(client/C, mob/M)
