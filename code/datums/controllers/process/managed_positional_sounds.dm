@@ -377,7 +377,12 @@ var/global/list/pending_managed_positional_sounds = list()
 	proc/client_mob_disposing(mob/M)
 		for (var/client/C as anything in src.client_listener_mobs.Copy())
 			if (src.client_listener_mobs[C] == M)
-				src.untrack_client(C)
+				var/client/affected_client = C
+				src.client_listener_mobs -= C
+				src.mark_client_dirty(C, TRUE)
+				SPAWN(0)
+					if (affected_client && !QDELETED(affected_client))
+						src.track_client(affected_client, TRUE)
 
 	/// Tracked mob movement callback.
 	proc/client_moved(datum/component/complexsignal/outermost_movable/component, turf/old_turf, turf/new_turf)
