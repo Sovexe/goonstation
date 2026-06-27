@@ -5,7 +5,7 @@
 /// - Store a weakref to the returned `/datum/managed_positional_sound` on the owning object when you only need a control handle.
 /// - Call `stop()` or qdel the datum when the owner is done with it. Non-repeating sounds self-dispose after their length is known and elapsed.
 /// - Use the public owner controls on the datum for runtime changes:
-///   `set_volume()`, `set_pitch()`, `set_repeat()`, `set_paused()`, `set_update_interval()`, `set_source()`, `add_emitter()`, `remove_emitter()`, and `clear_emitters()`.
+///   `set_volume()`, `set_pitch()`, `set_repeat()`, `set_paused()`, `set_update_interval()`, `add_emitter()`, `remove_emitter()`, and `clear_emitters()`.
 ///
 /// Implementation example using a weakref:
 /// ```
@@ -24,11 +24,39 @@
 /// 	src.managed_sound = null
 /// ```
 ///
+///
 /// Multi-emitter model:
 /// - One datum is one playback identity, one BYOND channel, and one synchronized timeline.
+/// - For grouped sounds, store the weakref on a controller/owning object that should outlive individual emitters.
 /// - Add extra emitters with `add_emitter(atom)`. All emitters share the same sound and repeat/offset state.
 /// - Listener volume comes from the loudest effective emitter so grouped speakers do not stack volume at midpoints.
 /// - Listener pan is blended from nearby emitters as a soft field to avoid hard left/right handoffs.
+///
+/// Multi-emitter implementation example:
+/// ```
+/// var/datum/weakref/managed_sound = null
+///
+/// proc/start_alarm(list/atom/emitters)
+/// 	if (!length(emitters))
+/// 		return
+///
+/// 	var/datum/managed_positional_sound/sound = play_managed_positional_sound(emitters[1], 'sound/path.ogg', 60, channel = VOLUME_CHANNEL_GAME, repeat = TRUE)
+/// 	if (!sound)
+/// 		return
+///
+/// 	src.managed_sound = get_weakref(sound)
+/// 	for (var/atom/emitter as anything in emitters)
+/// 		sound.add_emitter(emitter)
+///
+/// proc/refresh_alarm_emitters(list/atom/emitters)
+/// 	var/datum/managed_positional_sound/sound = src.managed_sound?.deref()
+/// 	if (!sound)
+/// 		return
+///
+/// 	sound.clear_emitters()
+/// 	for (var/atom/emitter as anything in emitters)
+/// 		sound.add_emitter(emitter)
+/// ```
 
 /// Maps reserved managed positional sound channels to the datum currently owning them.
 var/global/list/managed_positional_sound_channels = list()
@@ -52,7 +80,8 @@ var/global/list/managed_positional_sound_channels = list()
 	global.managed_positional_sound_process?.unregister_sound(managed_sound)
 
 /// Plays a positional sound whose volume and relative position are managed after the initial send.
-/// Returns a datum owned by the caller. Hold onto it and call stop(), set_volume(), set_source(), add_emitter(), or qdel() as needed.
+/// Returns a datum owned by the caller. Hold onto it and call stop(), set_volume(), add_emitter(), or qdel() as needed.
+/// The source argument is the first emitter only; it does not become special ownership for multi-emitter sounds.
 /// Non-repeating sounds are automatically disposed by the process after their sound length elapses, if BYOND reports one.
 /proc/play_managed_positional_sound(atom/source, soundin, vol, vary = FALSE, extrarange = 0, pitch = 1, ignore_flag = 0, channel = VOLUME_CHANNEL_GAME, flags = 0, update_interval = MANAGED_POSITIONAL_SOUND_DEFAULT_UPDATE_INTERVAL, repeat = FALSE)
 	RETURN_TYPE(/datum/managed_positional_sound)
@@ -240,8 +269,6 @@ var/global/list/managed_positional_sound_channels = list()
 
 /// Runtime controller for a positional sound token that needs listener/emitter updates after playback starts.
 /datum/managed_positional_sound
-	/// Convenience reference to the first emitter source.
-	var/atom/source
 	/// Physical emitters sharing this sound token's channel and timeline.
 	var/list/datum/managed_positional_sound_emitter/emitters = list()
 	/// Generated source sound used as the file and property template for all client sends.
@@ -343,7 +370,6 @@ var/global/list/managed_positional_sound_channels = list()
 	unregister_managed_positional_sound(src)
 	release_managed_positional_sound_channel(src)
 
-	src.source = null
 	src.emitters = null
 	src.sound_template = null
 	src.listeners = null
@@ -420,11 +446,6 @@ var/global/list/managed_positional_sound_channels = list()
 	src.mark_dirty()
 	return TRUE
 
-/// Moves this managed sound to a new source and immediately recalculates listeners.
-/datum/managed_positional_sound/proc/set_source(atom/source)
-	src.clear_emitters()
-	src.add_emitter(source)
-
 /// Adds a physical emitter to this managed sound.
 /datum/managed_positional_sound/proc/add_emitter(atom/source, register = TRUE)
 	RETURN_TYPE(/datum/managed_positional_sound_emitter)
@@ -438,8 +459,6 @@ var/global/list/managed_positional_sound_channels = list()
 	var/datum/managed_positional_sound_emitter/emitter = new(src, source)
 	src.emitters ||= list()
 	src.emitters[emitter] = TRUE
-	if (!src.source)
-		src.source = source
 
 	if (register)
 		global.managed_positional_sound_process?.register_emitter(emitter)
@@ -453,11 +472,6 @@ var/global/list/managed_positional_sound_channels = list()
 		return
 
 	src.emitters -= emitter
-	if (src.source == emitter.source)
-		src.source = null
-		for (var/datum/managed_positional_sound_emitter/remaining as anything in src.emitters)
-			src.source = remaining.source
-			break
 
 	global.managed_positional_sound_process?.unregister_emitter(emitter)
 	qdel(emitter)
@@ -473,7 +487,6 @@ var/global/list/managed_positional_sound_channels = list()
 		src.emitters -= emitter
 		global.managed_positional_sound_process?.unregister_emitter(emitter)
 		qdel(emitter)
-	src.source = null
 
 /// Source movement callback from an owned emitter.
 /datum/managed_positional_sound/proc/emitter_moved(datum/managed_positional_sound_emitter/emitter)
