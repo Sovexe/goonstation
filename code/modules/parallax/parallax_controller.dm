@@ -60,6 +60,8 @@
 		animation_time = (world.icon_size / src.outermost_movable.glide_size) * world.tick_lag
 
 	for (var/atom/movable/screen/parallax_layer/parallax_layer as anything in src.parallax_layers)
+		animate(parallax_layer, flags = ANIMATION_END_NOW, tag = "parallax_movement")
+
 		// Multiply the pixel change by the parallax value to determine the number of pixels the layer should move by.
 		// Update the position of the parallax layer on the client's screen, and animate the movement, using a time value derived from the client's mob's speed.
 		// Round to whole pixels to not blur sprites, carrying the remainder so repeated movements don't drift or snap.
@@ -77,7 +79,8 @@
 				animation_time, \
 				transform = matrix(	1, 0, rounded_x_parallax_pixel_change, \
 									0, 1, rounded_y_parallax_pixel_change), \
-				flags = ANIMATION_PARALLEL | ANIMATION_RELATIVE \
+				flags = ANIMATION_PARALLEL | ANIMATION_RELATIVE, \
+				tag = "parallax_movement" \
 			)
 
 		// Check whether the layer should be realigned on the client's screen.
