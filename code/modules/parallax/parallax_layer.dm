@@ -20,10 +20,6 @@
 	/// The y pixel offset required for a scrolling layer to remain within the boundaries of a client's screen.
 	var/animation_pixel_y_offset = 0
 
-	/// Fractional x movement carried between rounded parallax movement animations.
-	var/parallax_pixel_x_remainder = 0
-	/// Fractional y movement carried between rounded parallax movement animations.
-	var/parallax_pixel_y_remainder = 0
 
 /atom/movable/screen/parallax_layer/New(turf/newLoc, new_owner, parallax_render_source)
 	. = ..()
@@ -41,9 +37,6 @@
 
 /// Offsets the parallax layer using a transformation to either appear in the centre of the client's screen, or appear centred when the client is at the initial x and y coordinates.
 /atom/movable/screen/parallax_layer/proc/offset_layer()
-	src.parallax_pixel_x_remainder = 0
-	src.parallax_pixel_y_remainder = 0
-
 	src.initial_pixel_x_offset = round((src.parallax_render_source.icon_width / 2) * -1, 1)
 	src.initial_pixel_y_offset = round((src.parallax_render_source.icon_height / 2) * -1, 1)
 
