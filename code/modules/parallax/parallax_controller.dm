@@ -62,14 +62,23 @@
 	for (var/atom/movable/screen/parallax_layer/parallax_layer as anything in src.parallax_layers)
 		// Multiply the pixel change by the parallax value to determine the number of pixels the layer should move by.
 		// Update the position of the parallax layer on the client's screen, and animate the movement, using a time value derived from the client's mob's speed.
-		// Round to 1s to not blur sprites
-		animate( \
-			parallax_layer, \
-			animation_time, \
-			transform = matrix(	1, 0, round(x_pixel_change * parallax_layer.parallax_render_source.parallax_value, 1), \
-								0, 1, round(y_pixel_change * parallax_layer.parallax_render_source.parallax_value, 1)), \
-			flags = ANIMATION_PARALLEL | ANIMATION_RELATIVE \
-		)
+		// Round to whole pixels to not blur sprites, carrying the remainder so repeated movements don't drift or snap.
+		var/x_parallax_pixel_change = (x_pixel_change * parallax_layer.parallax_render_source.parallax_value) + parallax_layer.parallax_pixel_x_remainder
+		var/y_parallax_pixel_change = (y_pixel_change * parallax_layer.parallax_render_source.parallax_value) + parallax_layer.parallax_pixel_y_remainder
+		var/rounded_x_parallax_pixel_change = round(x_parallax_pixel_change, 1)
+		var/rounded_y_parallax_pixel_change = round(y_parallax_pixel_change, 1)
+
+		parallax_layer.parallax_pixel_x_remainder = x_parallax_pixel_change - rounded_x_parallax_pixel_change
+		parallax_layer.parallax_pixel_y_remainder = y_parallax_pixel_change - rounded_y_parallax_pixel_change
+
+		if (rounded_x_parallax_pixel_change || rounded_y_parallax_pixel_change)
+			animate( \
+				parallax_layer, \
+				animation_time, \
+				transform = matrix(	1, 0, rounded_x_parallax_pixel_change, \
+									0, 1, rounded_y_parallax_pixel_change), \
+				flags = ANIMATION_PARALLEL | ANIMATION_RELATIVE \
+			)
 
 		// Check whether the layer should be realigned on the client's screen.
 		UPDATE_TESSELLATION_ALIGNMENT(parallax_layer)
